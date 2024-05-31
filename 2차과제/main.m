@@ -34,7 +34,7 @@ imshow(frame);
 turn(droneObj, deg2rad(-30));
 pause(2);
 
-% roll 제어 - 좌측 비행
+% roll 제어 - 우측 비행
 moveright(droneObj, 'Distance', 1.0);
 pause(2);
 
