@@ -5,13 +5,13 @@ disp(['Center Y: ', num2str(y)]);
 function [center_x, center_y] = detect(input)
 
     image = imread(input);
-    hueDown = 0.30;
-    hueUp = 0.40;
+    th_down = 0.30;
+    th_up = 0.40;
 
     tohsv = rgb2hsv(image); %rgb to hsv
     h = tohsv(:,:,1);
     s = tohsv(:,:,2);
-    toBinary = (hueDown<h)&(h<hueUp)&(s>0.5);
+    toBinary = (th_down<h)&(h<th_up)&(s>0.5);
     filtered = imcomplement(toBinary);
 
     area = regionprops(filtered,'BoundingBox','Area');
