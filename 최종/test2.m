@@ -80,15 +80,17 @@ while true
     imshow(frame);
     
     % 빨간색 사각형 검출
-    [center_x, center_y] = square_detect(0, 0.05);
+    [x, y] = square_detect(frame, 0, 0.05);
+    move_to_center(drone, x, y);
     
-    if isnan(center_x) || isnan(center_y)
-        disp('No green square detected.');
+    if isnan(x) || isnan(y)
+        disp('No red square detected.');
         break;
     end
     
     % 중심 좌표 차이 계산
-    dis = [center_x, center_y] - center_point;
+    centroid = [x, y];
+    dis = centroid - center_point;
     
     % 중심에 도달했는지 확인
     if abs(dis(1)) <= 40 && abs(dis(2)) <= 40
@@ -132,15 +134,17 @@ while true
     imshow(frame);
     
     % 초록색 사각형 검출
-    [center_x, center_y] = square_detect(0.33, 0.44);
+    [x, y] = square_detect(frame, 0.33, 0.44);
+    move_to_center(drone, x, y);
     
-    if isnan(center_x) || isnan(center_y)
+    if isnan(x) || isnan(y)
         disp('No green square detected.');
         break;
     end
     
     % 중심 좌표 차이 계산
-    dis = [center_x, center_y] - center_point;
+    centroid = [x, y];
+    dis = centroid - center_point;
     
     % 중심에 도달했는지 확인
     if abs(dis(1)) <= 40 && abs(dis(2)) <= 40
@@ -163,15 +167,17 @@ while true
     imshow(frame);
     
     % 파란색 사각형 검출
-    [center_x, center_y] = square_detect(0.55, 0.65);
+    [x, y] = square_detect(frame, 0.55, 0.65);
     
-    if isnan(center_x) || isnan(center_y)
-        disp('No green square detected.');
+    if isnan(x) || isnan(y)
+        disp('No blue square detected.');
         break;
     end
     
     % 중심 좌표 차이 계산
-    dis = [center_x, center_y] - center_point;
+    centroid = [x, y];
+    dis = centroid - center_point;
+    move_to_center(drone, x, y);
     
     % 중심에 도달했는지 확인
     if abs(dis(1)) <= 40 && abs(dis(2)) <= 40
@@ -246,15 +252,17 @@ while true
     imshow(frame);
     
     % 초록색 사각형 검출
-    [center_x, center_y] = square_detect(0, 0.05);
+    [x, y] = square_detect(frame, 0, 0.05);
+    move_to_center(drone, x, y);
     
-    if isnan(center_x) || isnan(center_y)
-        disp('No green square detected.');
+    if isnan(x) || isnan(y)
+        disp('No red square detected.');
         break;
     end
     
     % 중심 좌표 차이 계산
-    dis = [center_x, center_y] - center_point;
+    centroid = [x, y];
+    dis = centroid - center_point;
     
     % 중심에 도달했는지 확인
     if abs(dis(1)) <= 40 && abs(dis(2)) <= 40
@@ -360,7 +368,7 @@ function move_to_center(drone, target_x, target_y)
     pause(1); % 잠시 멈춤
 end
 
-function [center_x, center_y] = square_detect(th_down, th_up)
+function [center_x, center_y] = square_detect(frame, th_down, th_up)
 
     % RGB 이미지를 HSV로 변환
     tohsv = rgb2hsv(frame);
