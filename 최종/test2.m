@@ -11,7 +11,7 @@ moveup(drone, 'Distance', 0.3, 'Speed', 1);
 pause(2);
 
 % 드론의 카메라 중심
-center_point = [480, 260];
+center_point = [480, 270];
 cameraObj = camera(drone);
 preboundingBox3=0; preboundingBox4=0;
 flag = 0;
@@ -50,7 +50,7 @@ for cnt = 0:4
         centroid = [x, y];
 
         % 목표 지점으로 드론 이동
-        move_to_center(drone, x, y);
+        move_to_center(drone, x, y, 40);
         disp(move_cnt);
         move_cnt = move_cnt + 1;
         if move_cnt > 3
@@ -75,13 +75,14 @@ for cnt = 0:4
 end
 
 %빨간색 사각형 확인
+dif = 40;
 while true
     frame = snapshot(cameraObj);
     imshow(frame);
     
     % 빨간색 사각형 검출
     [x, y] = square_detect(frame, 0, 0.05);
-    move_to_center(drone, x, y);
+    move_to_center(drone, x, y, dif);
     
     if isnan(x) || isnan(y)
         disp('No red square detected.');
@@ -93,10 +94,11 @@ while true
     dis = centroid - center_point;
     
     % 중심에 도달했는지 확인
-    if abs(dis(1)) <= 40 && abs(dis(2)) <= 40
+    if abs(dis(1)) <= dif && abs(dis(2)) <= dif
         disp('Centered successfully!');
         break;
     end
+    dif = dif + 3;
 end
 moveback(drone, 'Distance', 0.2, 'Speed', 1);
 
@@ -117,7 +119,7 @@ while true
     disp(centroid);
         
     % 목표 지점으로 드론 이동
-    move_to_center(drone, x, y);
+    move_to_center(drone, x, y, 40);
     
     % 중심 좌표가 맞춰졌는지 확인
     dis = centroid - center_point;
@@ -129,13 +131,14 @@ while true
 end
 moveforward(drone, 'Distance', 3, 'Speed', 1);
 %초록색 사각형 중심 확인
+dif = 40;
 while true
     frame = snapshot(cameraObj);
     imshow(frame);
     
     % 초록색 사각형 검출
     [x, y] = square_detect(frame, 0.33, 0.44);
-    move_to_center(drone, x, y);
+    move_to_center(drone, x, y, dif);
     
     if isnan(x) || isnan(y)
         disp('No green square detected.');
@@ -147,10 +150,11 @@ while true
     dis = centroid - center_point;
     
     % 중심에 도달했는지 확인
-    if abs(dis(1)) <= 40 && abs(dis(2)) <= 40
+    if abs(dis(1)) <= dif && abs(dis(2)) <= dif
         disp('Centered successfully!');
         break;
     end
+    dif = dif + 3;
 end
 moveback(drone, 'Distance', 0.2, 'Speed', 1);
 
@@ -162,6 +166,7 @@ pause(2);
 moveforward(drone, 'Distance', 3.7, 'Speed', 0.5);
 pause(2);
 %파란색 사각형 확인
+dif = 40;
 while true
     frame = snapshot(cameraObj);
     imshow(frame);
@@ -177,13 +182,14 @@ while true
     % 중심 좌표 차이 계산
     centroid = [x, y];
     dis = centroid - center_point;
-    move_to_center(drone, x, y);
+    move_to_center(drone, x, y, dif);
     
     % 중심에 도달했는지 확인
-    if abs(dis(1)) <= 40 && abs(dis(2)) <= 40
+    if abs(dis(1)) <= dif && abs(dis(2)) <= dif
         disp('Centered successfully!');
         break;
     end
+    dif = dif + 3;
 end
 moveback(drone, 'Distance', 0.2, 'Speed', 1);
 
@@ -224,7 +230,7 @@ for cnt = 0:4
         centroid = [x, y];
 
         % 목표 지점으로 드론 이동
-        move_to_center(drone, x, y);
+        move_to_center(drone, x, y, 40);
         disp(move_cnt);
         move_cnt = move_cnt + 1;
         if move_cnt > 3
@@ -247,13 +253,14 @@ for cnt = 0:4
 end
 
 %빨간색 사각형 확인
+dif = 40;
 while true
     frame = snapshot(cameraObj);
     imshow(frame);
     
     % 초록색 사각형 검출
     [x, y] = square_detect(frame, 0, 0.05);
-    move_to_center(drone, x, y);
+    move_to_center(drone, x, 270, dif);
     
     if isnan(x) || isnan(y)
         disp('No red square detected.');
@@ -265,10 +272,11 @@ while true
     dis = centroid - center_point;
     
     % 중심에 도달했는지 확인
-    if abs(dis(1)) <= 40 && abs(dis(2)) <= 40
+    if abs(dis(1)) <= dif && abs(dis(2)) <= dif
         disp('Centered successfully!');
         break;
     end
+    dif = dif + 3;
 end
 moveback(drone, 'Distance', 0.2, 'Speed', 1);
 
@@ -337,15 +345,15 @@ function [center_x, center_y, boundingBox] = detect_from_frame(frame)
     end
 end
 
-function move_to_center(drone, target_x, target_y)
+function move_to_center(drone, target_x, target_y, dif)
     % 드론 카메라의 중심
-    center_point = [480, 260]; % 예시 값 (드론 카메라의 해상도에 따라 다를 수 있음)
+    center_point = [480, 270]; % 예시 값 (드론 카메라의 해상도에 따라 다를 수 있음)
     
     % 목표 지점과 드론 카메라 중심의 차이 계산
     dis = [target_x, target_y] - center_point;
 
     % 드론 이동 제어
-    if(abs(dis(1)) <= 40 && abs(dis(2)) <= 40)
+    if(abs(dis(1)) <= dif && abs(dis(2)) <= dif)
         disp("Find Center Point!");
     elseif(abs(dis(1)) > 40)
         if dis(1) < 0
