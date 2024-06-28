@@ -1,3 +1,5 @@
+% 0628
+
 clear;
 % 드론 객체 생성 (drone 변수는 사용자의 환경에 맞게 설정)
 drone = ryze('Tello');
@@ -100,14 +102,13 @@ while true
     end
     dif = dif + 3;
 end
-moveback(drone, 'Distance', 0.2, 'Speed', 1);
 
 % 오른쪽 130도 회전
 turn(drone, deg2rad(130));
 pause(2);
 
 % 앞으로 6.2미터
-moveforward(drone, 'Distance', 3, 'Speed', 1);
+moveforward(drone, 'Distance', 3.1, 'Speed', 1);
 while true
     % 드론의 현재 프레임 가져오기
     frame = snapshot(cameraObj);
@@ -129,7 +130,7 @@ while true
         break;
     end
 end
-moveforward(drone, 'Distance', 3, 'Speed', 1);
+moveforward(drone, 'Distance', 3.1, 'Speed', 0.8);
 %초록색 사각형 중심 확인
 dif = 40;
 while true
@@ -191,7 +192,6 @@ while true
     end
     dif = dif + 3;
 end
-moveback(drone, 'Distance', 0.2, 'Speed', 1);
 
 % 오른쪽으로 215도 회전
 turn(drone, deg2rad(215));
@@ -278,7 +278,6 @@ while true
     end
     dif = dif + 3;
 end
-moveback(drone, 'Distance', 0.2, 'Speed', 1);
 
 % 드론 착륙
 land(drone);
