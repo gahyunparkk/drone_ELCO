@@ -72,9 +72,6 @@ for cnt = 0:4
         preboundingBox3 = boundingBox(3);
         preboundingBox4 = boundingBox(4);
     end
-    if flag == 1
-        break;
-    end
 end
 
 %빨간색 사각형 확인
@@ -83,7 +80,7 @@ while true
     imshow(frame);
     
     % 빨간색 사각형 검출
-    [center_x, center_y] = square_detect(frame, 0, 0.05);
+    [center_x, center_y] = square_detect(0, 0.05);
     
     if isnan(center_x) || isnan(center_y)
         disp('No green square detected.');
@@ -135,7 +132,7 @@ while true
     imshow(frame);
     
     % 초록색 사각형 검출
-    [center_x, center_y] = square_detect(frame, 0.33, 0.44);
+    [center_x, center_y] = square_detect(0.33, 0.44);
     
     if isnan(center_x) || isnan(center_y)
         disp('No green square detected.');
@@ -166,7 +163,7 @@ while true
     imshow(frame);
     
     % 파란색 사각형 검출
-    [center_x, center_y] = square_detect(frame, 0.55, 0.65);
+    [center_x, center_y] = square_detect(0.55, 0.65);
     
     if isnan(center_x) || isnan(center_y)
         disp('No green square detected.');
@@ -249,7 +246,7 @@ while true
     imshow(frame);
     
     % 초록색 사각형 검출
-    [center_x, center_y] = square_detect(frame, 0, 0.05);
+    [center_x, center_y] = square_detect(0, 0.05);
     
     if isnan(center_x) || isnan(center_y)
         disp('No green square detected.');
