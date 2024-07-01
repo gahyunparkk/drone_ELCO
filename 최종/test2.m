@@ -1,80 +1,62 @@
-% 0628
-
-clear;
+%0701
+clear; 
 % 드론 객체 생성 (drone 변수는 사용자의 환경에 맞게 설정)
 drone = ryze('Tello');
 
 % 드론 이륙
 takeoff(drone);
-pause(1);
+pause(2);
 
 % 위로 조금 이동
 moveup(drone, 'Distance', 0.3, 'Speed', 1);
-pause(2);
+pause(1);
 
 % 드론의 카메라 중심
-center_point = [480, 270];
+center_point = [480, 260];
 cameraObj = camera(drone);
-preboundingBox3=0; preboundingBox4=0;
-flag = 0;
+move_cnt = 0;
 
-% 앞으로 파란색 천막 중심 잡으면서 조금씩 이동
-for cnt = 0:4
-    move_cnt = 0;
+while true
+    % 드론의 현재 프레임 가져오기
+    frame = snapshot(cameraObj);
+    [x, y, boundingBox] = detect_from_frame(frame);
+    imshow(frame);
 
-    while true
-        % 드론의 현재 프레임 가져오기
-        frame = snapshot(cameraObj);
-        [x, y, boundingBox] = detect_from_frame(frame);
-        imshow(frame);
-
-        % 파란색 테두리가 감지되지 않으면 while 루프 중단
-        if isempty(boundingBox)
-            disp("no bounding box")
-            break;
-        end
-        
-        % 바운딩박스의 크기사 작아지면 = 천막을 지나치면 루프 종료 및 계속 직진
-        if flag == 1 || boundingBox(3)<preboundingBox3 || boundingBox(4)<preboundingBox4
-            flag = 1;
-            disp("flag = 1")
-            break;
-        end
-        disp(boundingBox);
-
-        %바운딩박스의 크기가 너무 작으면 비교 안하고 앞으로 전진
-        if (960/boundingBox(3))>7 || (720/boundingBox(4))>5.5
-            disp("bounding box too small")
-            break;
-        end
-
-        % 사각형 중심 좌표
-        centroid = [x, y];
-
-        % 목표 지점으로 드론 이동
-        move_to_center(drone, x, y, 40);
-        disp(move_cnt);
-        move_cnt = move_cnt + 1;
-        if move_cnt > 3
-            break;
-        end
-
-        % 중심 좌표가 맞춰졌는지 확인
-        dis = centroid - center_point;
-        if(abs(dis(1)) <= 40 && abs(dis(2)) <= 40)
-            disp("3.7m Centered successfully!");
-            break;
-        end
+    % 파란색 테두리가 감지되지 않으면 while 루프 중단
+    if isempty(boundingBox)
+        disp("no bounding box")
+        break;
     end
-    moveforward(drone, 'Distance', 0.7, 'Speed', 1);
-    pause(2);
+    
+    disp(boundingBox);
 
-    % 이전값 업데이트
-    if ~isempty(boundingBox)
-        preboundingBox3 = boundingBox(3);
-        preboundingBox4 = boundingBox(4);
+    %바운딩박스의 크기가 너무 작으면 비교 안하고 앞으로 전진
+    if (960/boundingBox(3))>7 || (720/boundingBox(4))>5.5
+        disp("bounding box too small")
+        break;
+    end
+
+    % 사각형 중심 좌표
+    centroid = [x, y];
+
+    % 목표 지점으로 드론 이동
+    move_to_center(drone, x, y, 40);
+    disp(move_cnt);
+    move_cnt = move_cnt + 1;
+    if move_cnt > 3
+        break;
+    end
+
+    % 중심 좌표가 맞춰졌는지 확인
+    dis = centroid - center_point;
+    if(abs(dis(1)) <= 40 && abs(dis(2)) <= 40)
+        disp("3.5m Centered successfully!");
+        break;
     end
 end
+moveforward(drone, 'Distance', 1.9, 'Speed', 0.7);
+pause(2);
+
 
 %빨간색 사각형 확인
 dif = 40;
@@ -100,15 +82,18 @@ while true
         disp('Centered successfully!');
         break;
     end
-    dif = dif + 3;
+    dif = dif + 7;
 end
+
+moveforward(drone, 'Distance', 1.4, 'Speed', 0.7);
+pause(1);
 
 % 오른쪽 130도 회전
 turn(drone, deg2rad(130));
 pause(2);
 
-% 앞으로 6.2미터
-moveforward(drone, 'Distance', 3.1, 'Speed', 1);
+% 앞으로 5.1미터
+moveforward(drone, 'Distance', 2.5, 'Speed', 0.7);
 while true
     % 드론의 현재 프레임 가져오기
     frame = snapshot(cameraObj);
@@ -125,12 +110,12 @@ while true
     % 중심 좌표가 맞춰졌는지 확인
     dis = centroid - center_point;
     if(abs(dis(1)) <= 35 && abs(dis(2)) <= 35)
-        disp("6.2m Centered successfully!");
+        disp("5.1m Centered successfully!");
         pause(2);
         break;
     end
 end
-moveforward(drone, 'Distance', 3.1, 'Speed', 0.8);
+moveforward(drone, 'Distance', 2.5, 'Speed', 0.7);
 %초록색 사각형 중심 확인
 dif = 40;
 while true
@@ -138,7 +123,7 @@ while true
     imshow(frame);
     
     % 초록색 사각형 검출
-    [x, y] = square_detect(frame, 0.33, 0.44);
+    [x, y] = square_detect(frame, 0.24, 0.34);
     move_to_center(drone, x, y, dif);
     
     if isnan(x) || isnan(y)
@@ -155,28 +140,27 @@ while true
         disp('Centered successfully!');
         break;
     end
-    dif = dif + 3;
+    dif = dif + 8;
 end
-moveback(drone, 'Distance', 0.2, 'Speed', 1);
 
 % 왼쪽으로 130도 회전
 turn(drone, deg2rad(-130));
 pause(2);
 
-% 3.7미터 전진
-moveforward(drone, 'Distance', 3.7, 'Speed', 0.5);
+% 2.7미터 전진
+moveforward(drone, 'Distance', 2.6, 'Speed', 0.7);
 pause(2);
-%파란색 사각형 확인
+%보라색 사각형 확인
 dif = 40;
 while true
     frame = snapshot(cameraObj);
     imshow(frame);
     
-    % 파란색 사각형 검출
-    [x, y] = square_detect(frame, 0.55, 0.65);
+    % 보라색 사각형 검출
+    [x, y] = square_detect(frame, 0.70, 0.79);
     
     if isnan(x) || isnan(y)
-        disp('No blue square detected.');
+        disp('No purple square detected.');
         break;
     end
     
@@ -190,17 +174,17 @@ while true
         disp('Centered successfully!');
         break;
     end
-    dif = dif + 3;
+    dif = dif + 8;
 end
 
 % 오른쪽으로 215도 회전
 turn(drone, deg2rad(215));
 pause(2);
 
-% 4.5미터 전진
+% 3.85미터 전진
 flag = 0;
 preboundingBox3 = 0; preboundingBox4 = 0;
-for cnt = 0:4
+for cnt = 0:1
     move_cnt = 0;
 
     while true
@@ -215,11 +199,11 @@ for cnt = 0:4
             break;
         end
         
-        if flag == 1 || boundingBox(3)<preboundingBox3 || boundingBox(4)<preboundingBox4
-            flag = 1;
-            disp("flag = 1")
-            break;
-        end
+        %if flag == 1 || boundingBox(3)<preboundingBox3 || boundingBox(4)<preboundingBox4
+        %    flag = 1;
+        %    disp("flag = 1")
+        %    break;
+        %end
         disp(boundingBox);
         if (960/boundingBox(3))>7 || (720/boundingBox(4))>5.5
             disp("bounding box too small")
@@ -240,11 +224,11 @@ for cnt = 0:4
         % 중심 좌표가 맞춰졌는지 확인
         dis = centroid - center_point;
         if(abs(dis(1)) <= 40 && abs(dis(2)) <= 40)
-            disp("4.5m Centered successfully!");
+            disp("3.85m Centered successfully!");
             break;
         end
     end
-    moveforward(drone, 'Distance', 0.88, 'Speed', 1);
+    moveforward(drone, 'Distance', 1.9, 'Speed', 0.7);
     pause(2);
     if ~isempty(boundingBox)
         preboundingBox3 = boundingBox(3);
@@ -257,10 +241,11 @@ dif = 40;
 while true
     frame = snapshot(cameraObj);
     imshow(frame);
-    
-    % 초록색 사각형 검출
+    dif = dif + 15;
+
+    % 빨간색 사각형 검출
     [x, y] = square_detect(frame, 0, 0.05);
-    move_to_center(drone, x, 270, dif);
+    move_to_center(drone, x, 260, dif);
     
     if isnan(x) || isnan(y)
         disp('No red square detected.');
@@ -268,15 +253,15 @@ while true
     end
     
     % 중심 좌표 차이 계산
-    centroid = [x, y];
+    centroid = [x, 260];
     dis = centroid - center_point;
     
+    disp(dif);
     % 중심에 도달했는지 확인
-    if abs(dis(1)) <= dif && abs(dis(2)) <= dif
+    if abs(dis(1)) <= dif
         disp('Centered successfully!');
         break;
     end
-    dif = dif + 3;
 end
 
 % 드론 착륙
@@ -346,7 +331,7 @@ end
 
 function move_to_center(drone, target_x, target_y, dif)
     % 드론 카메라의 중심
-    center_point = [480, 270]; % 예시 값 (드론 카메라의 해상도에 따라 다를 수 있음)
+    center_point = [480, 260]; % 예시 값 (드론 카메라의 해상도에 따라 다를 수 있음)
     
     % 목표 지점과 드론 카메라 중심의 차이 계산
     dis = [target_x, target_y] - center_point;
