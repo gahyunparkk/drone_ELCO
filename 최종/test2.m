@@ -1,11 +1,10 @@
-%0701
 clear; 
 % 드론 객체 생성 (drone 변수는 사용자의 환경에 맞게 설정)
 drone = ryze('Tello');
 
 % 드론 이륙
 takeoff(drone);
-pause(1);
+pause(1.5);
 
 % 위로 조금 이동
 moveup(drone, 'Distance', 0.3, 'Speed', 1);
@@ -48,7 +47,7 @@ while true
         break;
     end
 end
-moveforward(drone, 'Distance', 1.9, 'Speed', 0.8);
+moveforward(drone, 'Distance', 1.9, 'Speed', 0.75);
 pause(1);
 
 
@@ -61,7 +60,7 @@ while true
 
     % 빨간색 사각형 검출
     [x, y] = square_detect(frame, 0, 0.05);
-    move_to_center(drone, x, y, dif);
+    move_to_center(drone, x, 240, dif);
     
     if isnan(x) || isnan(y)
         disp('No red square detected.');
@@ -69,17 +68,17 @@ while true
     end
     
     % 중심 좌표 차이 계산
-    centroid = [x, y];
+    centroid = [x, 240];
     dis = centroid - center_point;
     
     % 중심에 도달했는지 확인
-    if abs(dis(1)) <= dif && abs(dis(2)) <= dif
+    if abs(dis(1)) <= dif
         disp('Centered successfully!');
         break;
     end
 end
 
-moveforward(drone, 'Distance', 1.55, 'Speed', 0.8);
+moveforward(drone, 'Distance', 1.55, 'Speed', 0.75);
 pause(1);
 
 % 오른쪽 130도 회전
@@ -87,8 +86,8 @@ turn(drone, deg2rad(130));
 pause(1);
 
 % 앞으로 5.1미터
-moveforward(drone, 'Distance', 2.5, 'Speed', 0.8);
-pause(2);
+moveforward(drone, 'Distance', 3, 'Speed', 0.8);
+pause(1);
 %초록색 사각형 중심 확인
 dif = 30;
 while true
@@ -115,34 +114,8 @@ while true
         break;
     end
 end
-moveforward(drone, 'Distance', 2.5, 'Speed', 0.7);
-pause(2);
-%초록색 사각형 중심 확인
-dif = 30;
-while true
-    frame = snapshot(cameraObj);
-    imshow(frame);
-    dif = dif + 15;
-
-    % 초록색 사각형 검출
-    [x, y] = square_detect(frame, 0.23, 0.35);
-    move_to_center(drone, x, y, dif);
-    
-    if isnan(x) || isnan(y)
-        disp('No green square detected.');
-        break;
-    end
-
-    % 중심 좌표 차이 계산
-    centroid = [x, y];
-    dis = centroid - center_point;
-    
-    % 중심에 도달했는지 확인
-    if abs(dis(1)) <= dif && abs(dis(2)) <= dif
-        disp('Centered successfully!');
-        break;
-    end
-end
+moveforward(drone, 'Distance', 2, 'Speed', 0.7);
+pause(1.5);
 
 % 왼쪽으로 130도 회전
 turn(drone, deg2rad(-130));
