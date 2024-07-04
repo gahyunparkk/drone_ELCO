@@ -11,40 +11,34 @@ pause(1);
 % 드론의 카메라 중심
 center_point = [480, 200];
 cameraObj = camera(drone);
-move_cnt = 0;
 
+%빨간색 사각형 확인
+dif = 40;
 while true
-    % 드론의 현재 프레임 가져오기
     frame = snapshot(cameraObj);
-    [x, y, boundingBox] = detect_from_frame(frame);
-    %imshow(frame);
+    imshow(frame);
+    dif = dif + 15;
 
-    % 파란색 테두리가 감지되지 않으면 while 루프 중단
-    if isempty(boundingBox)
-        disp("no bounding box")
+    % 빨간색 사각형 검출
+    [x, y] = square_detect(frame, 0, 0.07);
+    move_to_center(drone, x, 200, dif);
+ 
+    if isnan(x) || isnan(y)
+        disp('No red square detected.');
         break;
     end
-    
-    disp(boundingBox);
-
-    % 사각형 중심 좌표
-    centroid = [x, y];
-
-    % 목표 지점으로 드론 이동
-    move_to_center(drone, x, y, 60);
-    disp(move_cnt);
-    move_cnt = move_cnt + 1;
-    if move_cnt > 2
-        break;
-    end
-
-    % 중심 좌표가 맞춰졌는지 확인
+ 
+    % 중심 좌표 차이 계산
+    centroid = [x, 200];
     dis = centroid - center_point;
-    if(abs(dis(1)) <= 60 && abs(dis(2)) <= 60)
-        disp("3.5m Centered successfully!");
+
+    % 중심에 도달했는지 확인
+    if abs(dis(1)) <= dif
+        disp('Centered successfully!');
         break;
     end
 end
+
 moveforward(drone, 'Distance', 3.5, 'Speed', 0.85);
 pause(1.5);
 
@@ -191,7 +185,7 @@ while true
         break;
     end
 end
-moveforward(drone, 'Distance', 2.3, 'Speed', 1);
+moveforward(drone, 'Distance', 2.3, 'Speed', 0.9);
 pause(1);
 
 %빨간색 사각형 확인
@@ -347,7 +341,6 @@ function [center_x, center_y] = square_detect(frame, th_down, th_up)
         end
     end
     if isempty(boundingBox)
-        disp('No green square detected.');
         center_x = NaN;
         center_y = NaN;
         return;
