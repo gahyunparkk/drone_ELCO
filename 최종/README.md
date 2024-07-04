@@ -37,7 +37,8 @@
    drone 변수 생성 및 중심 기준 선언
    cameraObj 변수 생성
    오차범위 dif = 40 선언
-   ``` clear;
+   ```
+   clear;
 drone = ryze('Tello');
 
 takeoff(drone);
@@ -46,8 +47,7 @@ pause(1);
 % 드론 카메라 중심의 y 값을 200 으로 설정
 center_point = [480, 200];
 cameraObj = camera(drone);
-dif = 40;
-```
+dif = 40; ```
    
 3. 1단계[링 통과]
 
@@ -73,8 +73,7 @@ dif = 40;
         disp('Centered successfully!');
         break;
     end
-end
-```
+end```
   
 5. 2단계[130도 시계방향 회전 및 초록색 정사각형 중심 찾기]
 6. 3단계[130도 반시계방향 회전 및 보라색 정사각형 중심 찾기]
