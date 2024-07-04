@@ -50,7 +50,8 @@ pause(1);
 % 드론 카메라 중심의 y 값을 200 으로 설정
 center_point = [480, 200];
 cameraObj = camera(drone);
-dif = 40; ```
+dif = 40; 
+```
    
 * 1단계[링 통과]
 
@@ -80,7 +81,8 @@ dif = 40; ```
         disp('Centered successfully!');
         break;
     end
-end```
+end
+```
   
 * 2단계[130도 시계방향 회전 및 초록색 정사각형 중심 찾기]
 * 3단계[130도 반시계방향 회전 및 보라색 정사각형 중심 찾기]
