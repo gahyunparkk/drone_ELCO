@@ -111,9 +111,9 @@ while true
     frame = snapshot(cameraObj);
     [x, y, boundingBox] = detect_from_frame(frame);
 
-    % 파란색 가림막막이 인식되지 않는 경우 while loop 중단
+    % 파란색 가림막이 인식되지 않는 경우 while loop 중단
     if isempty(boundingBox)
-        disp("no bounding box")
+        disp('No bounding box detected.');
         break;
     end
 
@@ -127,8 +127,8 @@ while true
     end
     
     dis = centroid - center_point;
-    if(abs(dis(1)) <= 50 && abs(dis(2)) <= 50)
-        disp("3.85m Centered successfully!");
+    if abs(dis(1)) <= 50 && abs(dis(2)) <= 50
+        disp('Centered successfully!');
         break;
     end
 end
@@ -163,7 +163,7 @@ pause(1);
 
 land(drone);
 
-% 파란색 가림막 링의 중심 좌표를 return
+% 파란색 가림막 링의 중심 좌표를 return 하는 함수
 function [center_x, center_y, boundingBox] = detect_from_frame(frame)
     blue_th_down = 0.55;
     blue_th_up = 0.65;
@@ -182,8 +182,8 @@ function [center_x, center_y, boundingBox] = detect_from_frame(frame)
     for j = 1:length(area)
         tmpBox = area(j).BoundingBox;
 
-        % 드론 카메라boundingBox
-        if(tmpBox(3) == size(frame, 2) || tmpBox(4) == size(frame, 1)) %BoundingBox 예외 처리
+        % boundingBox 의 크기가 드론 카메라 frame 의 크기와 같은 경우 예외 처리
+        if(tmpBox(3) == size(frame, 2) || tmpBox(4) == size(frame, 1))
             continue;
         else
             if tmpArea <= area(j).Area
@@ -193,7 +193,7 @@ function [center_x, center_y, boundingBox] = detect_from_frame(frame)
         end
     end
     
-    % boundingBox 가 존재하는 경우 파란색 가림막 링의 중심 좌표 추출
+    % boundingBox 가 존재하는 경우 가림막 링의 중심 좌표 추출
     if ~isempty(boundingBox)
         center_x = boundingBox(1) + (0.5 * boundingBox(3));
         center_y = boundingBox(2) + (0.5 * boundingBox(4));
@@ -202,7 +202,7 @@ function [center_x, center_y, boundingBox] = detect_from_frame(frame)
         gray_inner = rgb2gray(inner_region);
         edges_inner = edge(gray_inner, 'Canny');
         
-        [centers, radii] = imfindcircles(edges_inner, [20 100]); % 반지름 범위 조정 가능
+        [centers, radii] = imfindcircles(edges_inner, [20 100]);
         
         if ~isempty(centers)
             % 크기가 가장 큰 원의 중심 좌표 추출
@@ -218,54 +218,49 @@ function [center_x, center_y, boundingBox] = detect_from_frame(frame)
     end
 end
 
+% 드론이 색상 마크 혹은 가림막 링의 중심 좌표로 이동하도록 하는 함수
 function move_to_center(drone, target_x, target_y, dif)
-    % 드론 카메라의 중심
-    center_point = [480, 200]; % 예시 값 (드론 카메라의 해상도에 따라 다를 수 있음)
-    
-    % 목표 지점과 드론 카메라 중심의 차이 계산
+    center_point = [480, 200];
     dis = [target_x, target_y] - center_point;
 
-    % 드론 이동 제어
-    if(abs(dis(1)) <= dif && abs(dis(2)) <= dif)
-        disp("Find Center Point!");
-    elseif(abs(dis(1)) > 40)
+    if abs(dis(1)) <= dif && abs(dis(2)) <= dif
+        disp('Find Center Point!');
+        
+    elseif abs(dis(1)) > 40
         if dis(1) < 0
-            disp("Move left")
+            disp('Move left');
             moveleft(drone, 'Distance', 0.2, 'Speed', 1);
         else
-            disp("Move right")
+            disp('Move right');
             moveright(drone, 'Distance', 0.2, 'Speed', 1);
         end
     end
-    if(abs(dis(2)) > 40)
+    
+    if abs(dis(2)) > 40
         if dis(2) < 0
-            disp("Move up")
+            disp('Move up');
             moveup(drone, 'Distance', 0.2, 'Speed', 1);
         else
-            disp("Move down")
+            disp('Move down');
             movedown(drone, 'Distance', 0.2, 'Speed', 1);
         end
     end
-    pause(1); % 잠시 멈춤
+    
+    pause(1);
 end
 
+% 색상 마크의 중심 좌표를 return 하는 함수
 function [center_x, center_y] = square_detect(frame, th_down, th_up)
-
-    % RGB 이미지를 HSV로 변환
     tohsv = rgb2hsv(frame);
     h = tohsv(:,:,1);
     s = tohsv(:,:,2);
     v = tohsv(:,:,3);
 
-    % 초록색 영역을 이진화 이미지로 생성
     toBinary = (th_down < h) & (h < th_up) & (s > 0.4) & (v > 0.2);
-
-    % 영역 검출
     area = regionprops(toBinary, 'BoundingBox', 'Area');
-
-    % 가장 큰 영역 검출 (전체 이미지가 아닌 영역)
     tmpArea = 0;
     boundingBox = [];
+    
     for j = 1:length(area)
         tmpBox = area(j).BoundingBox;
         if tmpBox(3) < size(frame, 2) * 0.9 && tmpBox(4) < size(frame, 1) * 0.9
@@ -275,12 +270,13 @@ function [center_x, center_y] = square_detect(frame, th_down, th_up)
             end
         end
     end
+    
     if isempty(boundingBox)
         center_x = NaN;
         center_y = NaN;
         return;
     end
-    % Bounding box의 중심 좌표 계산
+    
     center_x = boundingBox(1) + (0.5 * boundingBox(3));
     center_y = boundingBox(2) + (0.5 * boundingBox(4));
 end
