@@ -33,7 +33,7 @@
 ### 3. 알고리즘 및 소스코드 설명
 
 1. 드론 설정
-   ''' clear;
+   ``` clear;
 drone = ryze('Tello');
 
 takeoff(drone);
@@ -41,7 +41,7 @@ pause(1);
 
 % 드론 카메라 중심의 y 값을 200 으로 설정
 center_point = [480, 200];
-cameraObj = camera(drone);'''
+cameraObj = camera(drone); ```
    
 3. 1단계[링 통과]
 4. 2단계[130도 시계방향 회전 및 초록색 정사각형 중심 찾기]
