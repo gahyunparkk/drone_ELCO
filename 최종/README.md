@@ -33,7 +33,11 @@
 ### 3. 알고리즘 및 소스코드 설명
 
 1. 드론 설정
-``` clear;
+
+   drone 변수 생성 및 중심 기준 선언
+   cameraObj 변수 생성
+   오차범위 dif = 40 선언
+   ``` clear;
 drone = ryze('Tello');
 
 takeoff(drone);
@@ -42,13 +46,40 @@ pause(1);
 % 드론 카메라 중심의 y 값을 200 으로 설정
 center_point = [480, 200];
 cameraObj = camera(drone);
+dif = 40;
 ```
    
 3. 1단계[링 통과]
-4. 2단계[130도 시계방향 회전 및 초록색 정사각형 중심 찾기]
-5. 3단계[130도 반시계방향 회전 및 보라색 정사각형 중심 찾기]
-6. 4단계[215도 시계방향 회전 및 링 중심 찾기]
-7. 5단계[빨간색 정사각형 중심 찾기 맟 착륙]
-8. 함수 detect_from_frame
-9. 함수 move_to_center
-10. 함수 square_detect
+
+   squzre_detect 함수 사용하면서 빨간색 정사각형의 x, y축 찾기
+   move_to_center 함수 사용하면서 드론의 위치 조정
+   오차범위(시작할때 55, 한번 위치 조정할 때마다 15씩 증가) 안에 들어올때까지 무한반복
+   만약 정사각형이 인식되지 않으면 오류메세지 출력 후 앞으로 이동
+   ```while true
+    frame = snapshot(cameraObj);
+    dif = dif + 15;
+
+    [x, y] = square_detect(frame, 0, 0.07);
+    move_to_center(drone, x, y, dif);
+    if isnan(x) || isnan(y)
+        disp('No red square detected.');
+        break;
+    end
+ 
+    centroid = [x, y];
+    dis = centroid - center_point;
+
+    if abs(dis(1)) <= dif && abs(dis(2)) <= dif
+        disp('Centered successfully!');
+        break;
+    end
+end
+```
+  
+5. 2단계[130도 시계방향 회전 및 초록색 정사각형 중심 찾기]
+6. 3단계[130도 반시계방향 회전 및 보라색 정사각형 중심 찾기]
+7. 4단계[215도 시계방향 회전 및 링 중심 찾기]
+8. 5단계[빨간색 정사각형 중심 찾기 맟 착륙]
+9. 함수 detect_from_frame
+10. 함수 move_to_center
+11. 함수 square_detect
