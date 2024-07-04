@@ -40,8 +40,8 @@
    
    오차범위 dif = 40 선언
    
-   ```
-   clear;
+```
+clear;
 drone = ryze('Tello');
 
 takeoff(drone);
@@ -63,7 +63,8 @@ dif = 40;
    
    만약 정사각형이 인식되지 않으면 오류메세지 출력 후 앞으로 이동
    
-   ```while true
+```
+while true
     frame = snapshot(cameraObj);
     dif = dif + 15;
 
