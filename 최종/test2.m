@@ -183,7 +183,7 @@ function [center_x, center_y, boundingBox] = detect_from_frame(frame)
         tmpBox = area(j).BoundingBox;
 
         % boundingBox 의 크기가 드론 카메라 frame 의 크기와 같은 경우 예외 처리
-        if(tmpBox(3) == size(frame, 2) || tmpBox(4) == size(frame, 1))
+        if tmpBox(3) == size(frame, 2) || tmpBox(4) == size(frame, 1)
             continue;
         else
             if tmpArea <= area(j).Area
