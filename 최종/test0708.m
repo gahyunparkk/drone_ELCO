@@ -20,11 +20,12 @@ while true
 
     [x, y] = square_detect(frame, 0, 0.06);
     [x1, y1, boundingBox] = detect_from_frame(frame);
- 
-    %빨간색 색상 마크가 인식이 되지 않았을 때 드론의 중심과 링의 중심 일치하도록 조정
+
+    % 빨간색 색상 마크가 인식되지 않은 경우 드론 카메라 중심과 링의 중심이 일치하도록 조정
     if isnan(x) || isnan(y)
         disp('No red square detected.');
 
+        % 링이 
         %링이 인식이 되지 않았을 때 후진 후 다시 인식
         while ~isempty(boundingBox)
             disp('No bounding box detected.');
