@@ -1,1 +1,396 @@
+clear;
+drone = ryze('Tello');
 
+takeoff(drone);
+pause(1);
+
+% 드론 카메라 중심의 y 값을 200 으로 설정
+center_point = [480, 200];
+cameraObj = camera(drone);
+
+% 1 st stage
+% 드론 카메라 중심이 링 너머 빨간색 색상 마크의 중심과 일치하도록 조정
+dif = 40;
+while true
+    frame = snapshot(cameraObj);
+    imshow(frame);
+    dif = dif + 15;
+
+    [x, y] = square_detect(frame, 0, 0.06);
+    [x1, y1, boundingBox] = detect_from_frame(frame);
+
+    % 빨간색 색상 마크가 인식되지 않은 경우 드론 카메라 중심과 링의 중심이 일치하도록 조정
+    if isnan(x) || isnan(y)
+        disp('No red square detected.');
+
+        % 링이 인식되지 않은 경우 드론이 뒤로 이동한 후 다시 링을 인식
+        while ~isempty(boundingBox)
+            disp('No bounding box detected.');
+            moveback(drone, 'Distance', 0.2, 'Speed', 1);
+            pause(0.5);
+            [x1, y1, boundingBox] = detect_from_frame(frame);
+        end
+        
+        move_to_center(drone, x1, y1, dif);
+
+        centroid = [x1, y1];
+        dis = centroid - center_point;
+
+        if abs(dis(1)) <= 100 && abs(dis(2)) <= 100
+            disp('Centered successfully!');
+            break;
+        end
+    end
+    move_to_center(drone, x, y, dif);
+ 
+    centroid = [x, y];
+    dis = centroid - center_point;
+    centroid1 = [x1, y1];
+    dis1 = centroid1 - center_point;
+
+    if abs(dis(1)) <= dif && abs(dis(2)) <= dif 
+        if abs(dis1(1)) <= 100 && abs(dis1(2)) <= 100
+            disp('Centered successfully!');
+            break;
+        else
+            move_to_center(drone, x1, y1, dif);
+        end
+    end
+end
+
+moveforward(drone, 'Distance', 3.5, 'Speed', 0.85);
+pause(1.5);
+
+% 2 nd stage
+turn(drone, deg2rad(130));
+pause(2);
+ 
+moveforward(drone, 'Distance', 3.5, 'Speed', 1);
+pause(1);
+ 
+% 드론 카메라 중심이 링 너머 초록색 색상 마크의 중심과 일치하도록 조정
+dif = 30;
+while true
+    frame = snapshot(cameraObj);
+    imshow(frame);
+    dif = dif + 15;
+
+    [x, y] = square_detect(frame, 0.24, 0.34);
+    [x1, y1, boundingBox] = detect_from_frame(frame);
+ 
+    %초록색 색상 마크가 인식이 되지 않았을 때 드론의 중심과 링의 중심 일치하도록 조정
+    if isnan(x) || isnan(y)
+        disp('No green square detected.');
+
+        %링이 인식이 되지 않았을 때 후진 후 다시 인식
+        while ~isempty(boundingBox)
+            disp('No bounding box detected.');
+            moveback(drone, 'Distance', 0.2, 'Speed', 1);
+            pause(0.5);
+            [x1, y1, boundingBox] = detect_from_frame(frame);
+        end
+        
+        move_to_center(drone, x1, y1, dif);
+
+        centroid = [x1, y1];
+        dis = centroid - center_point;
+
+        if abs(dis(1)) <= 100 && abs(dis(2)) <= 100
+            disp('Centered successfully!');
+            break;
+        end
+    end
+    move_to_center(drone, x, y, dif);
+ 
+    centroid = [x, y];
+    dis = centroid - center_point;
+    centroid1 = [x1, y1];
+    dis1 = centroid1 - center_point;
+
+    if abs(dis(1)) <= dif && abs(dis(2)) <= dif
+        if abs(dis1(1)) <= 100 && abs(dis1(2)) <= 100
+            disp('Centered successfully!');
+            break;
+        else
+            move_to_center(drone, x1, y1, dif);
+        end
+    end
+end
+
+moveforward(drone, 'Distance', 1.6, 'Speed', 1);
+pause(1.5);
+
+% 3 rd stage
+turn(drone, deg2rad(-130));
+pause(1);
+
+% 드론 카메라 중심이 링 너머 보라색 색상 마크의 중심과 일치하도록 조정
+dif = 30;
+while true
+    frame = snapshot(cameraObj);
+    imshow(frame);
+    dif = dif + 15;
+
+    [x, y] = square_detect(frame, 0.70, 0.79);
+
+    [x1, y1, boundingBox] = detect_from_frame(frame);
+ 
+    %보라색 색상 마크가 인식이 되지 않았을 때 드론의 중심과 링의 중심 일치하도록 조정
+    if isnan(x) || isnan(y)
+        disp('No purple square detected.');
+
+        %링이 인식이 되지 않았을 때 후진 후 다시 인식
+        while ~isempty(boundingBox)
+            disp('No bounding box detected.');
+            moveback(drone, 'Distance', 0.2, 'Speed', 1);
+            pause(0.5);
+            [x1, y1, boundingBox] = detect_from_frame(frame);
+        end
+        
+        move_to_center(drone, x1, y1, dif);
+
+        centroid = [x1, y1];
+        dis = centroid - center_point;
+
+        if abs(dis(1)) <= 100 && abs(dis(2)) <= 100
+            disp('Centered successfully!');
+            break;
+        end
+    end
+    move_to_center(drone, x, y, dif);
+ 
+    centroid = [x, y];
+    dis = centroid - center_point;
+    centroid1 = [x1, y1];
+    dis1 = centroid1 - center_point;
+
+    if abs(dis(1)) <= dif && abs(dis(2)) <= dif
+        if abs(dis1(1)) <= 100 && abs(dis1(2)) <= 100
+            disp('Centered successfully!');
+            break;
+        else
+            move_to_center(drone, x1, y1, dif);
+        end
+    end
+end
+
+moveforward(drone, 'Distance', 2.6, 'Speed', 1);
+pause(1);
+
+% 4 th stage
+turn(drone, deg2rad(215));
+pause(1);
+
+dif = 40;
+while true
+    frame = snapshot(cameraObj);
+    imshow(frame);
+    dif = dif + 15;
+
+    [x, y] = square_detect(frame, 0, 0.06);
+    [x1, y1, boundingBox] = detect_from_frame(frame);
+ 
+    %빨간색 색상 마크가 인식이 되지 않았을 때 드론의 중심과 링의 중심 일치하도록 조정
+    if isnan(x) || isnan(y)
+        disp('No red square detected.');
+
+        %링이 인식이 되지 않았을 때 후진 후 다시 인식
+        while ~isempty(boundingBox)
+            disp('No bounding box detected.');
+            moveback(drone, 'Distance', 0.2, 'Speed', 1);
+            pause(0.5);
+            [x1, y1, boundingBox] = detect_from_frame(frame);
+        end
+        
+        move_to_center(drone, x1, y1, dif);
+
+        centroid = [x1, y1];
+        dis = centroid - center_point;
+
+        if abs(dis(1)) <= 100 && abs(dis(2)) <= 100
+            disp('Centered successfully!');
+            break;
+        end
+    end
+    move_to_center(drone, x, y, dif);
+ 
+    centroid = [x, y];
+    dis = centroid - center_point;
+    centroid1 = [x1, y1];
+    dis1 = centroid1 - center_point;
+
+    if abs(dis(1)) <= dif && abs(dis(2)) <= dif
+        if abs(dis1(1)) <= 100 && abs(dis1(2)) <= 100
+            disp('Centered successfully!');
+            break;
+        else
+            move_to_center(drone, x1, y1, dif);
+        end
+    end
+end
+
+moveforward(drone, 'Distance', 2.3, 'Speed', 0.9);
+pause(1);
+
+% 드론 카메라 중심이 링 너머 빨간색 색상 마크의 중심과 일치하도록 조정
+dif = 40;
+while true
+    frame = snapshot(cameraObj);
+    imshow(frame);
+    dif = dif + 20;
+
+    [x, y] = square_detect(frame, 0, 0.06);
+
+    if isnan(x) || isnan(y)
+        [x, y] = square_detect(frame, 0.94, 1);
+    end
+
+    move_to_center(drone, x, 200, dif);
+
+    if isnan(x) || isnan(y)
+        disp('No red square detected.');
+        break;
+    end
+
+    centroid = [x, 200];
+    dis = centroid - center_point;
+
+    if abs(dis(1)) <= dif
+        disp('Centered successfully!');
+        break;
+    end
+end
+moveforward(drone, 'Distance', 1.55, 'Speed', 0.85);
+pause(1);
+
+land(drone);
+
+% 파란색 가림막 링의 중심 좌표를 return 하는 함수
+function [center_x, center_y, boundingBox] = detect_from_frame(frame)
+    blue_th_down = 0.55;
+    blue_th_up = 0.65;
+
+    tohsv = rgb2hsv(frame);
+    h = tohsv(:,:,1);
+    s = tohsv(:,:,2);
+
+    toBinary = (blue_th_down < h) & (h < blue_th_up) & (s > 0.5);
+    filtered = imcomplement(toBinary);
+
+    area = regionprops(filtered, 'BoundingBox', 'Area');
+    tmpArea = 0;
+    boundingBox = [];
+    
+    for j = 1:length(area)
+        tmpBox = area(j).BoundingBox;
+
+        % boundingBox 의 크기가 드론 카메라 frame 의 크기와 같은 경우 예외 처리
+        if(tmpBox(3) == size(frame, 2) || tmpBox(4) == size(frame, 1))
+            continue;
+        else
+            if tmpArea <= area(j).Area
+                tmpArea = area(j).Area;
+                boundingBox = area(j).BoundingBox;
+            end
+        end
+    end
+    
+    % boundingBox 가 존재하는 경우 가림막 링의 중심 좌표 추출
+    if ~isempty(boundingBox)
+        center_x = boundingBox(1) + (0.5 * boundingBox(3));
+        center_y = boundingBox(2) + (0.5 * boundingBox(4));
+        
+        inner_region = imcrop(frame, boundingBox);
+        gray_inner = rgb2gray(inner_region);
+        edges_inner = edge(gray_inner, 'Canny');
+        
+        [centers, radii] = imfindcircles(edges_inner, [20 100]);
+        
+        if ~isempty(centers)
+            % 크기가 가장 큰 원의 중심 좌표 추출
+            [~, max_idx] = max(radii);
+            circle_center = centers(max_idx, :);
+            
+            center_x = boundingBox(1) + circle_center(1);
+            center_y = boundingBox(2) + circle_center(2);
+        end
+        hold on
+        rectangle('Position', boundingBox, 'EdgeColor', '#F59F00', 'LineWidth', 2);
+        plot(center_x, center_y, 'o')
+        title(['Center X: ', num2str(center_x), ', Center Y: ', num2str(center_y)])
+        axis on
+        grid on
+    else
+        center_x = NaN;
+        center_y = NaN;
+    end
+end
+
+% 드론이 색상 마크 혹은 가림막 링의 중심 좌표로 이동하도록 하는 함수
+function move_to_center(drone, target_x, target_y, dif)
+    center_point = [480, 200];
+    dis = [target_x, target_y] - center_point;
+
+    if abs(dis(1)) <= dif && abs(dis(2)) <= dif
+        disp('Find Center Point!');
+        
+    elseif abs(dis(1)) > 40
+        if dis(1) < 0
+            disp('Move left');
+            moveleft(drone, 'Distance', 0.2, 'Speed', 1);
+        else
+            disp('Move right');
+            moveright(drone, 'Distance', 0.2, 'Speed', 1);
+        end
+    end
+    
+    if abs(dis(2)) > 40
+        if dis(2) < 0
+            disp('Move up');
+            moveup(drone, 'Distance', 0.2, 'Speed', 1);
+        else
+            disp('Move down');
+            movedown(drone, 'Distance', 0.2, 'Speed', 1);
+        end
+    end
+    
+    pause(1);
+end
+
+% 색상 마크의 중심 좌표를 return 하는 함수
+function [center_x, center_y] = square_detect(frame, th_down, th_up)
+    tohsv = rgb2hsv(frame);
+    h = tohsv(:,:,1);
+    s = tohsv(:,:,2);
+    v = tohsv(:,:,3);
+
+    toBinary = (th_down < h) & (h < th_up) & (s > 0.4) & (v > 0.2);
+    area = regionprops(toBinary, 'BoundingBox', 'Area');
+    tmpArea = 0;
+    boundingBox = [];
+    
+    for j = 1:length(area)
+        tmpBox = area(j).BoundingBox;
+        if tmpBox(3) < size(frame, 2) * 0.9 && tmpBox(4) < size(frame, 1) * 0.9
+            if tmpArea <= area(j).Area
+                tmpArea = area(j).Area;
+                boundingBox = area(j).BoundingBox;
+            end
+        end
+    end
+    
+    if isempty(boundingBox)
+        center_x = NaN;
+        center_y = NaN;
+        return;
+    end
+    
+    center_x = boundingBox(1) + (0.5 * boundingBox(3));
+    center_y = boundingBox(2) + (0.5 * boundingBox(4));
+    hold on
+    rectangle('Position', boundingBox, 'EdgeColor', '#F59F00', 'LineWidth', 2);
+    plot(center_x, center_y, 'o')
+    title(['Center X: ', num2str(center_x), ', Center Y: ', num2str(center_y)])
+    axis on
+    grid on
+end
