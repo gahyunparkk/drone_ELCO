@@ -92,32 +92,66 @@ dif = 40;
 
    squzre_detect 함수 사용하면서 빨간색 정사각형의 x, y축 찾기
    
-   move_to_center 함수 사용하면서 드론의 위치 조정
+   move_to_center 함수 사용하면서 드론의 위치 조정, 
    
    오차범위(시작할때 55, 한번 위치 조정할 때마다 15씩 증가) 안에 들어올때까지 무한반복
    
    만약 정사각형이 인식되지 않으면 오류메세지 출력 후 앞으로 이동
+
+   빨간색 마크가 화면 중심에 오면 파란색 링 인식 후 링 안에 들어와있는지 판단, 링 밖에 벗어나있으면 드론 화면과 링의 중심 맞추고 빨간색 사각형 다시 인식
+
+   빨간색 마크가 인식이 되지 않으면 링 먼저 인식 후 화면과 중심 일치하도록 조정, 링이 인식되지 않으면 드론 후진하면서 링 인식 시도
    
 ```
 while true
     frame = snapshot(cameraObj);
+    imshow(frame);
     dif = dif + 15;
 
-    [x, y] = square_detect(frame, 0, 0.07);
-    move_to_center(drone, x, y, dif);
+    [x, y] = square_detect(frame, 0, 0.06);
+    [x1, y1, boundingBox] = detect_from_frame(frame);
+ 
+    %빨간색 색상 마크가 인식이 되지 않았을 때 드론의 중심과 링의 중심 일치하도록 조정
     if isnan(x) || isnan(y)
         disp('No red square detected.');
-        break;
+
+        %링이 인식이 되지 않았을 때 후진 후 다시 인식
+        while ~isempty(boundingBox)
+            disp('No bounding box detected.');
+            moveback(drone, 'Distance', 0.2, 'Speed', 1);
+            pause(0.5);
+            [x1, y1, boundingBox] = detect_from_frame(frame);
+        end
+        
+        move_to_center(drone, x1, y1, dif);
+
+        centroid = [x1, y1];
+        dis = centroid - center_point;
+
+        if abs(dis(1)) <= 100 && abs(dis(2)) <= 100
+            disp('Centered successfully!');
+            break;
+        end
     end
+    move_to_center(drone, x, y, dif);
  
     centroid = [x, y];
     dis = centroid - center_point;
+    centroid1 = [x1, y1];
+    dis1 = centroid1 - center_point;
 
-    if abs(dis(1)) <= dif && abs(dis(2)) <= dif
-        disp('Centered successfully!');
-        break;
+    if abs(dis(1)) <= dif && abs(dis(2)) <= dif 
+        if abs(dis1(1)) <= 100 && abs(dis1(2)) <= 100
+            disp('Centered successfully!');
+            break;
+        else
+            move_to_center(drone, x1, y1, dif);
+        end
     end
 end
+
+moveforward(drone, 'Distance', 3.5, 'Speed', 0.85);
+pause(1.5);
 ```
   
 * 2단계[130도 시계방향 회전 및 초록색 정사각형 중심 찾기]
