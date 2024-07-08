@@ -30,6 +30,7 @@ while true
             disp('No bounding box detected.');
             moveback(drone, 'Distance', 0.2, 'Speed', 1);
             pause(0.5);
+            [x1, y1, boundingBox] = detect_from_frame(frame);
         end
         
         move_to_center(drone, x1, y1, dif);
@@ -77,7 +78,6 @@ while true
     dif = dif + 15;
 
     [x, y] = square_detect(frame, 0.24, 0.34);
-
     [x1, y1, boundingBox] = detect_from_frame(frame);
  
     %초록색 색상 마크가 인식이 되지 않았을 때 드론의 중심과 링의 중심 일치하도록 조정
@@ -87,6 +87,8 @@ while true
         %링이 인식이 되지 않았을 때 후진 후 다시 인식
         while ~isempty(boundingBox)
             disp('No bounding box detected.');
+            moveback(drone, 'Distance', 0.2, 'Speed', 1);
+            pause(0.5);
             [x1, y1, boundingBox] = detect_from_frame(frame);
         end
         
@@ -144,6 +146,7 @@ while true
             disp('No bounding box detected.');
             moveback(drone, 'Distance', 0.2, 'Speed', 1);
             pause(0.5);
+            [x1, y1, boundingBox] = detect_from_frame(frame);
         end
         
         move_to_center(drone, x1, y1, dif);
@@ -196,6 +199,8 @@ while true
         %링이 인식이 되지 않았을 때 후진 후 다시 인식
         while ~isempty(boundingBox)
             disp('No bounding box detected.');
+            moveback(drone, 'Distance', 0.2, 'Speed', 1);
+            pause(0.5);
             [x1, y1, boundingBox] = detect_from_frame(frame);
         end
         
