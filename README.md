@@ -410,6 +410,14 @@ land(drone);
 
 * #### 함수 detect_from_frame
 
+    링의 바운딩박스와 중심 좌표 x, y를 알아내는 함수
+
+    파란색 영역을 찾기 위해 색상 값이 0.55와 0.65 사이에 있고, 채도가 0.5 이상인 픽셀을 선택 후 이진화된 이미지를 반전시킴
+
+    regionprops 함수를 사용해 반전된 이미지에서 각 연결된 영역의 bounding box와 면젹을 계산
+
+    bounding box 내에서 원을 찾아 가장 큰 원의 중심을 구하고 결과 시각화화
+
 ```
 function [center_x, center_y, boundingBox] = detect_from_frame(frame)
     blue_th_down = 0.55;
@@ -474,8 +482,14 @@ end
 
 * #### 함수 move_to_center
 
+    드론이 색상 마크 혹은 가림막 링의 중심 좌표로 이동하도록 하는 함수
+
+    드론의 중심(480, 200)과 매개변수로 주어진 x, y 좌표의 차이를 구하고, 주어진 오차값 범위 안에 들어가면 "Find Center Point" 문구 출력
+
+    드론의 중심과 좌표의 차이가 40 이상이면 상하좌우로 0.2m씩 드론 조절
+    * 텔로의 최소 이동 가능 거리가 0.2m로, 0.2m씩 좌우 또는 상하로 반복되는 경우가 있어 오차값을 점차 늘림림
+
 ```
-% 드론이 색상 마크 혹은 가림막 링의 중심 좌표로 이동하도록 하는 함수
 function move_to_center(drone, target_x, target_y, dif)
     center_point = [480, 200];
     dis = [target_x, target_y] - center_point;
@@ -509,8 +523,15 @@ end
 
 * #### 함수 square_detect
 
+    색상 마크의 중심 좌표를 반환 하는 함수
+
+    매개변수로 주어진 범위 안에 존제하는 픽셀을 선택하여 이진화 이미지 생성
+
+    regionprops 함수를 사용하여 이미지에서 각 연결된 영역의 bounding box와 면적 계산 후 for loop를 통해 가장 큰 영역 검출
+
+    만약 bounding box가 비어있지 않으면 중심을 계산후 시각화
+
 ```
-% 색상 마크의 중심 좌표를 return 하는 함수
 function [center_x, center_y] = square_detect(frame, th_down, th_up)
     tohsv = rgb2hsv(frame);
     h = tohsv(:,:,1);
