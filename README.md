@@ -67,7 +67,7 @@
  
 ## 3. 알고리즘 및 소스 코드 설명
 
-* 드론 설정
+* #### 드론 설정
 
    drone 변수 생성 및 중심 기준 선언
    
@@ -88,7 +88,7 @@ cameraObj = camera(drone);
 dif = 40; 
 ```
    
-* 1단계[링 통과]
+* #### 1단계[링 통과]
 
    squzre_detect 함수 사용하면서 빨간색 정사각형의 x, y축 찾기
 
@@ -156,7 +156,7 @@ moveforward(drone, 'Distance', 3.5, 'Speed', 0.85);
 pause(1.5);
 ```
   
-* 2단계[130도 시계방향 회전 및 초록색 정사각형 중심 찾기]
+* #### 2단계[130도 시계방향 회전 및 초록색 정사각형 중심 찾기]
 
     드론 130도 시계방향 회전 후 3.5m 전진
     * 텔로 비행시 최대 이동 가능 거리가 5m라 3.5m, 1.6m 나눠서 비행
@@ -229,7 +229,7 @@ pause(1.5);
 ```   
     
   
-* 3단계[130도 반시계방향 회전 및 보라색 정사각형 중심 찾기]
+* #### 3단계[130도 반시계방향 회전 및 보라색 정사각형 중심 찾기]
 
     드론 130도 반시계방향 회전 후 보라색 마크 인식
 
@@ -297,7 +297,7 @@ moveforward(drone, 'Distance', 2.6, 'Speed', 1);
 pause(1);
 ```
 
-* 4단계[215도 시계방향 회전 및 링 중심 찾기]
+* #### 4단계[215도 시계방향 회전 및 링 중심 찾기]
 
     드론 215도 시계방향 회전 후 빨간색 마크 인식
 
@@ -365,7 +365,7 @@ moveforward(drone, 'Distance', 2.3, 'Speed', 0.9);
 pause(1);
 ```
 
-* 5단계[빨간색 정사각형 중심 찾기 맟 착륙]
+* #### 5단계[빨간색 정사각형 중심 찾기 맟 착륙]
 
     정확한 착륙 지점을 위해 링 통과 직전 x축만 비교
     * y축은 앞서 2.3m 전진하기 전 높이를 맞춰놔서 비교할 필요가 없다고 판단
@@ -408,7 +408,7 @@ pause(1);
 land(drone);
 ```
 
-* 함수 detect_from_frame
+* #### 함수 detect_from_frame
 
 ```
 function [center_x, center_y, boundingBox] = detect_from_frame(frame)
@@ -472,7 +472,7 @@ function [center_x, center_y, boundingBox] = detect_from_frame(frame)
 end
 ```
 
-* 함수 move_to_center
+* #### 함수 move_to_center
 
 ```
 % 드론이 색상 마크 혹은 가림막 링의 중심 좌표로 이동하도록 하는 함수
@@ -507,7 +507,7 @@ function move_to_center(drone, target_x, target_y, dif)
 end
 ```
 
-* 함수 square_detect
+* #### 함수 square_detect
 
 ```
 % 색상 마크의 중심 좌표를 return 하는 함수
