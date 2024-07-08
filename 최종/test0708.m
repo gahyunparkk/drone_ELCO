@@ -25,8 +25,7 @@ while true
     if isnan(x) || isnan(y)
         disp('No red square detected.');
 
-        % 링이 
-        %링이 인식이 되지 않았을 때 후진 후 다시 인식
+        % 링이 인식되지 않은 경우 드론이 뒤로 이동한 후 다시 링을 인식
         while ~isempty(boundingBox)
             disp('No bounding box detected.');
             moveback(drone, 'Distance', 0.2, 'Speed', 1);
