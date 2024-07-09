@@ -91,6 +91,7 @@
 
 ## 3. 단계별 알고리즘
 
+![blockdiagram](https://github.com/gahyunparkk/drone_ELCO/assets/133209913/72c5c787-be55-4ed5-a607-34249bb67d63)
 ( 표1 : 단계별 알고리즘을 나타낸 블럭도 )
  
 ## 4. 소스 코드
