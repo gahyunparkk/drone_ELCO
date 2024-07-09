@@ -189,7 +189,7 @@ pause(1.5);
 - 드론을 시계 방향으로 130도 회전시킨 후 앞으로 3.5 m 이동시킨다.
   - 드론이 2단계에서 이동해야 하는 거리는 5.1 m 이지만 드론이 정지하지 않고 이동할 수 있는 거리는 최대 5 m 이다. 따라서 드론을 3.5 m, 1.6 m 로 나누어 이동시켰다.
   - 드론을 3.5 m 보다 적게 이동시키면 이후 2단계 링을 인식할 때 4단계 링도 함께 인식되어 2단계 링의 중심 좌표가 제대로 추출되지 않는 문제가 발생했다. 따라서 4단계 링이 드론 카메라에 인식되지 않는 적절한 거리인 3.5 m 을 선택했다.
-< img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/d30ec816-1acd-4ec8-b505-0355c91e12cd.jpg" width="40%" height="30%"/>
+< img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/d30ec816-1acd-4ec8-b505-0355c91e12cd.jpg width="40%" height="30%"/>
 ![image2](https://github.com/gahyunparkk/drone_ELCO/assets/133209913/d30ec816-1acd-4ec8-b505-0355c91e12cd){: width="40%" height="30%"}
 - square_detect 함수를 이용하여 링 너머 초록색 색상 마크의 중심 좌표를 찾는다. 초록색 색상 마크의 hsv 값의 h 범위를 0.24 ~ 0.34 로 생각한다.
    - 색상 마크가 인식되지 않은 경우 : detect_from_frame 함수를 이용하여 링의 중심 좌표를 찾는다. move_to_center 함수를 이용하여 드론이 링의 중심에 위치하도록 조정한다.
