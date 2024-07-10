@@ -66,11 +66,11 @@ while true
 end
 
 moveforward(drone, 'Distance', 3.5, 'Speed', 0.85);
-pause(1.5);
+pause(1);
 
 % 2 nd stage
 turn(drone, deg2rad(130));
-pause(1.5);
+pause(1);
 turn_cnt = 0;
 while true
     frame = snapshot(cameraObj);
@@ -116,7 +116,7 @@ end
 moveforward(drone, 'Distance', 3.5, 'Speed', 1);
 pause(1);
 
-dif = 25;
+dif = 30;
 while true
     frame = snapshot(cameraObj);
     dif = dif + 15;
@@ -170,7 +170,7 @@ while true
 end
 
 moveforward(drone, 'Distance', 1.6, 'Speed', 1);
-pause(1.5);
+pause(1);
 
 % 3 rd stage
 turn(drone, deg2rad(-130));
@@ -217,7 +217,7 @@ while true
 end
 
 
-dif = 25;
+dif = 30;
 while true
     frame = snapshot(cameraObj);
     dif = dif + 15;
