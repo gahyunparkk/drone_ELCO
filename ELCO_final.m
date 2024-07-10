@@ -66,7 +66,7 @@ while true
     end
 end
 
-moveforward(drone, 'Distance', 3.5, 'Speed', 0.9);
+moveforward(drone, 'Distance', 3.5, 'Speed', 0.8);
 pause(1.5);
 
 % 2 nd stage
@@ -117,7 +117,7 @@ end
 moveforward(drone, 'Distance', 3.5, 'Speed', 1);
 pause(1);
 
-dif = 30;
+dif = 25;
 while true
     frame = snapshot(cameraObj);
     imshow(frame);
@@ -189,11 +189,11 @@ while true
         [x1, y1, boundingBox] = detect_from_frame(frame);
         dis = centroid - center_point;
         if dis(1)>20
-            turn(drone, deg2rad(5));
+            turn(drone, deg2rad(6));
             disp("turned 5 degree");
             pause(1);
         elseif dis(1)<-20
-            turn(drone, deg2rad(-5));
+            turn(drone, deg2rad(-6));
             disp("turned -5 degree");
             pause(1);
         else
@@ -204,12 +204,12 @@ while true
         break;
     end
     if dis(1)>20
-        turn(drone, deg2rad(5));
+        turn(drone, deg2rad(6));
         disp("turned 5 degree");
         pause(1);
         turn_cnt = turn_cnt + 1;
     elseif dis(1)<-20
-        turn(drone, deg2rad(-5));
+        turn(drone, deg2rad(-6));
         disp("turned -5 degree");
         pause(1);
         turn_cnt = turn_cnt + 1;
@@ -219,7 +219,7 @@ while true
 end
 
 
-dif = 30;
+dif = 25;
 while true
     frame = snapshot(cameraObj);
     imshow(frame);
@@ -293,11 +293,11 @@ while true
         [x1, y1, boundingBox] = detect_from_frame(frame);
         dis = centroid - center_point;
         if dis(1)>20
-            turn(drone, deg2rad(5));
+            turn(drone, deg2rad(6));
             disp("turned 5 degree");
             pause(1);
         elseif dis(1)<-20
-            turn(drone, deg2rad(-5));
+            turn(drone, deg2rad(-6));
             disp("turned -5 degree");
             pause(1);
         else
@@ -309,12 +309,12 @@ while true
         break;
     end
     if dis(1)>20
-        turn(drone, deg2rad(5));
+        turn(drone, deg2rad(6));
         disp("turned 5 degree");
         pause(1);
         turn_cnt = turn_cnt + 1;
     elseif dis(1)<-20
-        turn(drone, deg2rad(-5));
+        turn(drone, deg2rad(-6));
         disp("turned -5 degree");
         pause(1);
         turn_cnt = turn_cnt + 1;
@@ -380,7 +380,7 @@ while true
     end
 end
 
-moveforward(drone, 'Distance', 1.85, 'Speed', 0.9);
+moveforward(drone, 'Distance', 1.85, 'Speed', 0.8);
 pause(1);
 
 land(drone);
