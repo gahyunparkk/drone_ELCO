@@ -9,12 +9,12 @@ center_point = [480, 200];
 cameraObj = camera(drone);
 
 % 1 st stage
-dif = 40;
+dif = 20;
 while true
     frame = snapshot(cameraObj);
     dif = dif + 15;
 
-    [x, y] = square_detect(frame, 0, 0.08);
+    [x, y] = square_detect(frame, 0, 0.06);
     if isnan(x) || isnan(y)
         [x, y] = square_detect(frame, 0.94, 1);
     end
@@ -115,7 +115,7 @@ end
 moveforward(drone, 'Distance', 3.5, 'Speed', 1);
 pause(1);
 
-dif = 30;
+dif = 20;
 while true
     frame = snapshot(cameraObj);
     dif = dif + 15;
@@ -215,7 +215,7 @@ while true
 end
 
 
-dif = 30;
+dif = 20;
 while true
     frame = snapshot(cameraObj);
     dif = dif + 15;
@@ -374,7 +374,7 @@ moveforward(drone, 'Distance', 2.3, 'Speed', 0.9);
 pause(1);
 
 % 드론 카메라 중심이 링 너머 빨간색 색상 마크의 중심과 일치하도록 조정
-dif = 40;
+dif = 30;
 while true
     frame = snapshot(cameraObj);
     dif = dif + 20;
