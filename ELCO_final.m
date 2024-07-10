@@ -65,7 +65,7 @@ while true
     end
 end
 
-moveforward(drone, 'Distance', 3.5, 'Speed', 0.8);
+moveforward(drone, 'Distance', 3.5, 'Speed', 0.85);
 pause(1.5);
 
 % 2 nd stage
@@ -320,7 +320,7 @@ while true
     end
 end
 
-moveforward(drone, 'Distance', 2, 'Speed', 0.9);
+moveforward(drone, 'Distance', 2, 'Speed', 1);
 pause(1);
 
 dif = 20;
@@ -379,7 +379,7 @@ while true
     end
 end
 
-moveforward(drone, 'Distance', 1.85, 'Speed', 0.8);
+moveforward(drone, 'Distance', 1.85, 'Speed', 0.85);
 pause(1);
 
 land(drone);
