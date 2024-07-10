@@ -12,7 +12,6 @@ cameraObj = camera(drone);
 dif = 40;
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     dif = dif + 15;
 
     [x, y] = square_detect(frame, 0, 0.08);
@@ -75,7 +74,6 @@ pause(1.5);
 turn_cnt = 0;
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     [x, y] = square_detect(frame, 0.30, 0.39);
 
     centroid = [x, y];
@@ -120,7 +118,6 @@ pause(1);
 dif = 30;
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     dif = dif + 15;
 
     [x, y] = square_detect(frame, 0.30, 0.39);
@@ -180,7 +177,6 @@ pause(1);
 turn_cnt = 0;
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     [x, y] = square_detect(frame, 0.70, 0.79);
 
     centroid = [x, y];
@@ -222,7 +218,6 @@ end
 dif = 30;
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     dif = dif + 15;
 
     [x, y] = square_detect(frame, 0.70, 0.79);
@@ -282,7 +277,6 @@ pause(1);
 turn_cnt = 0;
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     [x, y] = square_detect(frame, 0, 0.06);
     if isnan(x) || isnan(y)
         [x, y] = square_detect(frame, 0.94, 1);
@@ -326,7 +320,6 @@ end
 dif = 40;
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     dif = dif + 15;
 
     [x, y] = square_detect(frame, 0, 0.06);
@@ -384,7 +377,6 @@ pause(1);
 dif = 40;
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     dif = dif + 20;
 
     [x, y] = square_detect(frame, 0, 0.06);
