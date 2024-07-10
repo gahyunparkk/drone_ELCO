@@ -127,7 +127,7 @@
 <div align=center> 
 (표 1 : 단계별 알고리즘을 나타낸 블럭도)
 <br>
-<img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/72c5c787-be55-4ed5-a607-34249bb67d63.png" width="80%" height="50%" />
+<img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/d4af82b9-384a-4bfe-be40-0fa71c0c2433.png" width="80%" height="50%" />
 </div>
 
 ## 4. 소스 코드
