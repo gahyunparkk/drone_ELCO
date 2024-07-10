@@ -35,7 +35,7 @@
 
 ## [1.](#01-개요) 개요
 
-### 1.1. 경로 상세 규격
+### [1.1.](#011-경로-상세-규격) 경로 상세 규격
 
 <img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/d1be7afb-e357-4df9-b37f-0e154b694d6d.png" width="60%" height="40%" />
 <br>
