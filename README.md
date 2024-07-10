@@ -6,7 +6,7 @@
 - 팀명 : ELCO
 - 팀원 : 국민대학교 전자공학부 박가현, 김주영, 배지완 <br/>
 
-<img src="https://raw.githubusercontent.com/queryholic/captures/master/lombok-install-eclipse/_1.png" width="650" height="400" />
+<img iamge1="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/bfc8ef0f-27da-4f9c-8f44-191ae07e1588.jpg" width="650" height="400" />
 
 ![image1](https://github.com/gahyunparkk/drone_ELCO/assets/133209913/bfc8ef0f-27da-4f9c-8f44-191ae07e1588)
 
