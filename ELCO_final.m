@@ -326,6 +326,9 @@ while true
     dif = dif + 15;
 
     [x, y] = square_detect(frame, 0, 0.06);
+    if isnan(x) || isnan(y)
+        [x, y] = square_detect(frame, 0.94, 1);
+    end
     [x1, y1, boundingBox] = detect_from_frame(frame);
  
     % 링 너머 빨간색 색상 마크가 인식되지 않은 경우 드론 카메라 중심과 링의 중심이 일치하도록 조정
