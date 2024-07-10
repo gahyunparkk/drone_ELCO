@@ -4,7 +4,7 @@
 - 2024 미니드론 자율비행 경진대회 기술 워크샵
 - 주최 : 대한전기학회
 - 팀명 : ELCO
-- 팀원 : 국민대학교 전자공학부 박가현, 김주영, 배지완 <br/>
+- 팀원 : 국민대학교 전자공학부 박가현, 김주영, 배지완 ---
 
 <img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/bfc8ef0f-27da-4f9c-8f44-191ae07e1588.jpg" width="60%" height="40%" />
 
