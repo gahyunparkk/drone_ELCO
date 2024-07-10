@@ -55,9 +55,7 @@
   - 링 중심의 높이 : 80 ~ 100 cm
  
 - 색상 hsv 값의 h 범위
-  - 빨간색 색상 마크
-    - 1단계 : 0 ~ 0.08
-    - 4단계 : 0 ~ 0.06, 0.94 ~ 1
+  - 빨간색 색상 마크 : 0 ~ 0.06, 0.94 ~ 1
   - 초록색 색상 마크 : 0.30 ~ 0.39
   - 보라색 색상 마크 : 0.70 ~ 0.79
   - 파란색 가림막 : 0.55 ~ 0.75
@@ -164,7 +162,7 @@ dif = 20;
 
 - 색상 마크의 중심 좌표를 변수 `centroid`, 드론 카메라 중심과 색상 마크의 중심 사이의 거리를 변수 `dis`에 저장한다.
 - 링의 중심 좌표를 변수 `centroid1`, 드론 카메라 중심과 링의 중심 사이의 거리를 변수 `dis1`에 저장한다.
-- **`square_detect` 함수를 이용하여 빨간색 색상 마크의 중심 좌표**를 찾는다. 이때, 빨간색 색상 마크의 hsv 값의 h 범위는 0 ~ 0.05, 0.94 ~ 1 이기 때문에 하나의 범위만을 선택하면 색상 마크가 제대로 인식되지 않는 문제가 발생했다. 따라서 두 가지 범위 중 색상 마크가 제대로 인식 되는 범위를 선택했다.
+- **`square_detect` 함수를 이용하여 빨간색 색상 마크의 중심 좌표**를 찾는다. 이때, 빨간색 색상 마크의 hsv 값의 h 범위는 0 ~ 0.06, 0.94 ~ 1 이기 때문에 하나의 범위만을 선택하면 색상 마크가 제대로 인식되지 않는 문제가 발생했다. 따라서 두 가지 범위 중 색상 마크가 제대로 인식 되는 범위를 선택했다.
    - 색상 마크가 인식되지 않은 경우 : `detect_from_frame` 함수를 이용하여 링의 중심 좌표를 찾는다. `move_to_center` 함수를 이용하여 드론이 링의 중심에 위치하도록 조정한다.
         - 링이 인식되지 않은 경우 : 드론을 뒤로 이동시킨 후 다시 링을 인식한다. 이 과정은 드론이 링을 인식할 때까지 반복한다.
 - **`move_to_center` 함수를 이용하여 드론을 색상 마크의 중심에 위치**시킨다. 이 과정은 드론 카메라 중심과 색상 마크의 중심 사이의 오차가 허용된 오차 범위 내에 포함될 때까지 반복한다. 오차 범위는 20으로 초기화하고, 드론이 한 번 이동할 때마다 15씩 증가한다.
@@ -175,10 +173,9 @@ dif = 20;
 ```
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     dif = dif + 15;
 
-    [x, y] = square_detect(frame, 0, 0.05);
+    [x, y] = square_detect(frame, 0, 0.06);
     if isnan(x) || isnan(y)
         [x, y] = square_detect(frame, 0.94, 1);
     end
@@ -189,7 +186,7 @@ while true
         disp('No red square detected.');
 
         % 링이 인식되지 않은 경우 드론이 뒤로 이동한 후 다시 링을 인식
-        while ~isempty(boundingBox)
+        while isnan(boundingBox)
             disp('No bounding box detected.');
             moveback(drone, Distance', 0.2, 'Speed', 1);
             pause(0.5);
@@ -264,7 +261,6 @@ turn_cnt = 0;
 
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     [x, y] = square_detect(frame, 0.30, 0.39);
 
     centroid = [x, y];
@@ -308,10 +304,9 @@ end
 moveforward(drone, 'Distance', 3.5, 'Speed', 1);
 pause(1);
 
-dif = 30;
+dif = 25;
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     dif = dif + 15;
 
     [x, y] = square_detect(frame, 0.30, 0.39);
@@ -322,7 +317,7 @@ while true
         disp('No green square detected.');
 
         % 링이 인식되지 않은 경우 드론이 뒤로 이동한 후 다시 링을 인식
-        while ~isempty(boundingBox)
+        while isnan(boundingBox)
             disp('No bounding box detected.');
             moveback(drone, 'Distance', 0.2, 'Speed', 1);
             pause(0.5);
@@ -426,7 +421,7 @@ while true
     end
 end
 
-dif = 30;
+dif = 25;
 while true
     frame = snapshot(cameraObj);
     dif = dif + 15;
@@ -439,7 +434,7 @@ while true
         disp('No purple square detected.');
 
         % 링이 인식이 되지 않은 경우 드론이 뒤로 이동한 후 다시 링을 인식
-        while ~isempty(boundingBox)
+        while isnan(boundingBox)
             disp('No bounding box detected.');
             moveback(drone, 'Distance', 0.2, 'Speed', 1);
             pause(0.5);
@@ -559,18 +554,19 @@ pause(1);
 </div>
 <br>
 
-- 4.2.와 동일한 방법으로 **드론을 빨간색 색상 마크와 링의 중심**에 위치시켰다. 빨간색 색상 마크의 hsv 값의 h 범위를 0 ~ 0.06 으로 생각한다.
+- 4.2.와 동일한 방법으로 **드론을 빨간색 색상 마크와 링의 중심**에 위치시켰다. 빨간색 색상 마크의 hsv 값의 h 범위를 0 ~ 0.06, 0.94 ~ 1 로 생각한다.
 - **드론이 앞으로 1.55 m 이동**한 후 착륙한다.
 
 ```
-% 드론 카메라 중심이 링 너머 빨간색 색상 마크의 중심과 일치하도록 조정
 dif = 20;
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     dif = dif + 15;
 
     [x, y] = square_detect(frame, 0, 0.06);
+    if isnan(x) || isnan(y)
+        [x, y] = square_detect(frame, 0.94, 1);
+    end
     [x1, y1, boundingBox] = detect_from_frame(frame);
  
     % 링 너머 빨간색 색상 마크가 인식되지 않은 경우 드론 카메라 중심과 링의 중심이 일치하도록 조정
@@ -578,7 +574,7 @@ while true
         disp('No red square detected.');
 
         % 링이 인식되지 않은 경우 드론이 뒤로 이동한 후 다시 링을 인식
-        while ~isempty(boundingBox)
+        while isnan(boundingBox)
             disp('No bounding box detected.');
             moveback(drone, 'Distance', 0.2, 'Speed', 1);
             pause(0.5);
@@ -618,7 +614,7 @@ while true
     end
 end
 
-moveforward(drone, 'Distance', 1.85, 'Speed', 0.9);
+moveforward(drone, 'Distance', 1.85, 'Speed', 0.8);
 pause(1);
 
 land(drone);
