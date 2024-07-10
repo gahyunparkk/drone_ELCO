@@ -15,7 +15,7 @@ while true
     imshow(frame);
     dif = dif + 15;
 
-    [x, y] = square_detect(frame, 0, 0.05);
+    [x, y] = square_detect(frame, 0, 0.06);
     if isnan(x) || isnan(y)
         [x, y] = square_detect(frame, 0.94, 1);
     end
