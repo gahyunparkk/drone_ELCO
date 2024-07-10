@@ -6,9 +6,11 @@
 - 팀명 : ELCO
 - 팀원 : 국민대학교 전자공학부 박가현, 김주영, 배지완
 <br>
-<img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/bfc8ef0f-27da-4f9c-8f44-191ae07e1588.jpg" width="60%" height="40%" />
+<p img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/bfc8ef0f-27da-4f9c-8f44-191ae07e1588.jpg" width="60%" height="40%" / p>
 <br>
+<div align=center> 
 (그림 1 : 대회 준비 모습)
+</div>
 <br>
 
 ## 0. 목차
@@ -580,7 +582,6 @@ end
 (그림 11 : 드론 카메라 중심과 색상 마크 혹은 링의 중심의 차이를 계산하여 상하좌우로 이동)
 <br>
 
-<br>
 ```
 function move_to_center(drone, target_x, target_y, dif)
     center_point = [480, 200];
