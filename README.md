@@ -39,9 +39,11 @@
 
 ### 1.1. 경로 상세 규격
 
+<div align=center> 
 <img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/d1be7afb-e357-4df9-b37f-0e154b694d6d.png" width="60%" height="40%" />
 <br>
 (그림 2 : 주어진 경로)
+</div>
 <br>
 
 <br>
@@ -74,9 +76,11 @@
 
 ### 2.1. 드론이 링과 링 너머 색상 마크의 중심에 위치하도록 조정
 
+<div align=center> 
 <img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/a3371aa6-22e6-44f8-954c-517c56631fd1.jpg" width="60%" height="40%" />
 <br>
 (그림 3 : 드론이 링과 링 너머 색상 마크의 중심에 위치하도록 조정)
+</div>
 <br>
 
 <br>
@@ -94,10 +98,11 @@
 
 - 드론이 이동할 수 있는 최소 거리는 20 cm 이다. 드론이 위치해야 하는 곳에 정확히 위치하기 위해 계속해서 상하 또는 좌우로 이동하는 문제가 발생했다. 위의 문제를 해결하고, 드론이 링 또는 색상 마크의 중심으로 이동하는 데 걸리는 시간을 최소화하기 위해 오차 범위와 관련된 변수를 설정하고, 변수의 값을 증가시키면서 드론을 이동시켰다.
 <br>
-
+<div align=center> 
 <img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/14c51526-42e8-49c2-9708-7ced932b1ac9.jpg" width="60%" height="40%" />
 <br>
 (그림 4 : 드론이 상하 또는 좌우로 이동하는 것이 반복되는 문제 상황 발생)
+</div>
 <br>
 
 <br>
@@ -118,9 +123,11 @@
 
 ## 3. 단계별 알고리즘
 
+<div align=center> 
 (표 1 : 단계별 알고리즘을 나타낸 블럭도)
 <br>
 <img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/72c5c787-be55-4ed5-a607-34249bb67d63.png" width="80%" height="50%" />
+</div>
 
 ## 4. 소스 코드
 
@@ -145,9 +152,11 @@ dif = 40;
 
 ### 4.2. 1단계 : 드론을 링 너머 빨간색 색상 마크와 링의 중심에 위치시킨 후 링 통과
 
+<div align=center> 
 <img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/7044615e-d173-4631-a81e-fd366139f6d4.png" width="60%" height="40%" />
 <br>
 (그림 5 : 1단계 색상 마크와 링의 중심을 인식하는 드론 카메라의 frame)
+</div>
 <br>
 
 <br>
@@ -221,9 +230,11 @@ pause(1.5);
 
 ### 4.3. 2단계 : 드론이 시계 방향으로 130도 회전 및 링 너머 초록색 색상 마크와 링의 중심에 위치
 
+<div align=center> 
 <img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/f7fd9071-4a31-443d-a076-810cd1102e1b.png" width="60%" height="40%" />
 <br>
 (그림 6 : 2단계 색상 마크와 링의 중심을 인식하는 드론 카메라의 frame)
+</div>
 <br>
 
 <br>
@@ -235,6 +246,7 @@ pause(1.5);
 <img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/a8a6e291-0176-4fcf-9424-fa860977fd14.jpg" width="60%" height="40%" />
 <br>
 (그림 7 : 2단계 링을 인식할 때 4단계 링도 함께 인식되는 문제 상황 발생)
+</div>
 <br>
 
 <br>
@@ -308,9 +320,11 @@ pause(1.5);
 
 ### 4.4. 3단계 : 드론이 반시계 방향으로 130도 회전 및 링 너머 보라색 색상 마크와 링의 중심에 위치
 
+<div align=center> 
 <img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/3e57b0d7-e313-4d54-95e0-523efc0fa115.png" width="60%" height="40%" />
 <br>
 (그림 8 : 3단계 색상 마크와 링의 중심을 인식하는 드론 카메라의 frame)
+</div>
 <br>
 
 <br>
@@ -382,9 +396,11 @@ pause(1);
 
 ### 4.5. 4-1단계 : 드론이 시계 방향으로 215도 회전 및 링 너머 빨간색 색상 마크와 링 중심에 위치
 
+<div align=center> 
 <img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/818e2538-ba86-44f2-bced-ed3190cec7b6.png" width="60%" height="40%" />
 <br>
 (그림 9 : 4단계 색상 마크와 링의 중심을 인식하는 드론 카메라의 frame)
+</div>
 <br>
 
 <br>
@@ -456,9 +472,11 @@ pause(1);
 
 ### 4.6. 4-2단계 : 드론이 링 너머 빨간색 색상 마크에 위치한 후 링 통과 후 착륙
 
+<div align=center> 
 <img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/3accf3aa-6a99-4a12-b345-aa4a1867a098.png" width="60%" height="40%" />
 <br>
 (그림 10 : 4단계 색상 마크의 중심을 인식하는 드론 카메라의 frame)
+</div>
 <br>
 
 <br>
@@ -577,9 +595,12 @@ end
 - 드론의 중심 좌표인 (480, 200)과 매개변수로 주어진 색상 마크 혹은 가림막 링의 중심 좌표의 차이를 구한다.
   - 차이가 허용된 오차 범위인 40보다 작은 경우 : 드론이 색상 마크 혹은 링의 중심에 위치했다고 판단한다. "Find Center Point"를 출력한다.
   - 차이가 40보다 큰 경우 : 드론이 상하좌우로 0.2 m 씩 이동한다.
+<br>
+<div align=center> 
 <img src="https://github.com/gahyunparkk/drone_ELCO/assets/133209913/d63bb1f4-3311-4498-88bb-cd30cb298313.jpg" width="60%" height="40%" />
 <br>
 (그림 11 : 드론 카메라 중심과 색상 마크 혹은 링의 중심의 차이를 계산하여 상하좌우로 이동)
+</div>
 <br>
 
 ```
