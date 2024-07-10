@@ -25,6 +25,7 @@
    - [2.2.](#22-오차-범위를-증가시키면서-드론을-이동) 오차 범위를 증가시키면서 드론을 이동
    - [2.3.](#23-드론-카메라-중심의-y좌표를-360이-아닌-200으로-설정) 드론 카메라 중심의 y좌표를 360이 아닌 200으로 설정
    - [2.4.](#24-4단계 링을 통과하기 전 드론의 위치와 색상 마크 중심의 y좌표를 비교하는 과정을 생략) 4단계 링을 통과하기 전 드론의 위치와 색상 마크 중심의 y좌표를 비교하는 과정을 생략
+   - [2.5.](#25-드론이 색상 마크의 중심에 위치하는 최적의 각도를 찾으며 회전) 드론이 색상 마크의 중심에 위치하는 최적의 각도를 찾으며 회전
 
 [3.](#3-단계별-알고리즘) 단계별 알고리즘
 
@@ -117,6 +118,10 @@
 
 - 위의 과정은 드론이 착륙 지점에 정확히 착지하도록 하기 위한 것이고, 4단계가 시작된 직후 드론을 색상 마크와 링의 중심에 위치시킨다. 따라서 드론의 위치와 색상 마크 중심의 y좌표를 비교하는 과정은 필수적이지 않은 것으로 판단했다.
 
+### 2.5. 드론이 색상 마크의 중심에 위치하는 최적의 각도를 찾으며 회전
+
+- 
+
 ## 3. 단계별 알고리즘
 
 - 블럭도를 이용하여 단계별 알고리즘을 나타내면 표 1과 같다.
@@ -171,12 +176,14 @@ dif = 40;
 ```
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     dif = dif + 15;
 
-    [x, y] = square_detect(frame, 0, 0.06);
+    [x, y] = square_detect(frame, 0, 0.08);
+    if isnan(x) || isnan(y)
+        [x, y] = square_detect(frame, 0.94, 1);
+    end
     [x1, y1, boundingBox] = detect_from_frame(frame);
- 
+
     % 링 너머 빨간색 색상 마크가 인식되지 않은 경우 드론 카메라 중심과 링의 중심이 일치하도록 조정
     if isnan(x) || isnan(y)
         disp('No red square detected.');
@@ -252,18 +259,59 @@ pause(1.5);
     
 ```
 turn(drone, deg2rad(130));
-pause(2);
+pause(1.5);
+turn_cnt = 0;
+while true
+    frame = snapshot(cameraObj);
+    [x, y] = square_detect(frame, 0.30, 0.39);
+    centroid = [x, y];
+
+    if isnan(x)
+        [x1, y1, boundingBox] = detect_from_frame(frame);
+        dis = centroid - center_point;
+
+        % 링 너머 초록색 색상 마크
+        if dis(1) > 20
+            turn(drone, deg2rad(5));
+            disp("turned 5 degree");
+            pause(1);
+        elseif dis(1) < -20
+            turn(drone, deg2rad(-5));
+            disp("turned -5 degree");
+            pause(1);
+        else
+            break;
+        end
+    end
+    dis = centroid - center_point;
+    if turn_cnt == 2
+        break;
+    end
+    if dis(1)>20
+        turn(drone, deg2rad(5));
+        disp("turned 5 degree");
+        pause(1);
+        turn_cnt = turn_cnt + 1;
+    elseif dis(1)<-20
+        turn(drone, deg2rad(-5));
+        disp("turned -5 degree");
+        pause(1);
+        turn_cnt = turn_cnt + 1;
+    else
+        break;
+    end
+end
+
  
 moveforward(drone, 'Distance', 3.5, 'Speed', 1);
 pause(1);
 
-dif = 40;
+dif = 30;
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     dif = dif + 15;
 
-    [x, y] = square_detect(frame, 0.26, 0.36);
+    [x, y] = square_detect(frame, 0.30, 0.39);
     [x1, y1, boundingBox] = detect_from_frame(frame);
  
     % 링 너머 초록색 색상 마크가 인식되지 않은 경우 드론 카메라 중심과 링의 중심이 일치하도록 조정
@@ -277,7 +325,7 @@ while true
             pause(0.5);
             [x1, y1, boundingBox] = detect_from_frame(frame);
         end
-
+        
         move_to_center(drone, x1, y1, dif);
 
         centroid = [x1, y1];
