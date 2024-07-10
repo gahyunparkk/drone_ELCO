@@ -9,7 +9,7 @@ center_point = [480, 200];
 cameraObj = camera(drone);
 
 % 1 st stage
-dif = 40;
+dif = 30;
 while true
     frame = snapshot(cameraObj);
     dif = dif + 15;
