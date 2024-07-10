@@ -12,9 +12,10 @@ cameraObj = camera(drone);
 dif = 20;
 while true
     frame = snapshot(cameraObj);
+    imshow(frame);
     dif = dif + 15;
 
-    [x, y] = square_detect(frame, 0, 0.06);
+    [x, y] = square_detect(frame, 0, 0.05);
     if isnan(x) || isnan(y)
         [x, y] = square_detect(frame, 0.94, 1);
     end
@@ -65,7 +66,7 @@ while true
     end
 end
 
-moveforward(drone, 'Distance', 3.5, 'Speed', 0.85);
+moveforward(drone, 'Distance', 3.5, 'Speed', 0.9);
 pause(1.5);
 
 % 2 nd stage
@@ -74,6 +75,7 @@ pause(1.5);
 turn_cnt = 0;
 while true
     frame = snapshot(cameraObj);
+    imshow(frame);
     [x, y] = square_detect(frame, 0.30, 0.39);
 
     centroid = [x, y];
@@ -81,11 +83,11 @@ while true
         [x1, y1, boundingBox] = detect_from_frame(frame);
         dis = centroid - center_point;
         if dis(1)>20
-            turn(drone, deg2rad(5));
+            turn(drone, deg2rad(6));
             disp("turned 5 degree");
             pause(1);
         elseif dis(1)<-20
-            turn(drone, deg2rad(-5));
+            turn(drone, deg2rad(-6));
             disp("turned -5 degree");
             pause(1);
         else
@@ -97,12 +99,12 @@ while true
         break;
     end
     if dis(1)>20
-        turn(drone, deg2rad(5));
+        turn(drone, deg2rad(6));
         disp("turned 5 degree");
         pause(1);
         turn_cnt = turn_cnt + 1;
     elseif dis(1)<-20
-        turn(drone, deg2rad(-5));
+        turn(drone, deg2rad(-6));
         disp("turned -5 degree");
         pause(1);
         turn_cnt = turn_cnt + 1;
@@ -115,9 +117,10 @@ end
 moveforward(drone, 'Distance', 3.5, 'Speed', 1);
 pause(1);
 
-dif = 20;
+dif = 30;
 while true
     frame = snapshot(cameraObj);
+    imshow(frame);
     dif = dif + 15;
 
     [x, y] = square_detect(frame, 0.30, 0.39);
@@ -177,7 +180,8 @@ pause(1);
 turn_cnt = 0;
 while true
     frame = snapshot(cameraObj);
-    [x, y] = square_detect(frame, 0.70, 0.79);
+    imshow(frame);
+    [x, y] = square_detect(frame, 0.69, 0.79);
 
     centroid = [x, y];
     dis = centroid - center_point;
@@ -215,12 +219,13 @@ while true
 end
 
 
-dif = 20;
+dif = 30;
 while true
     frame = snapshot(cameraObj);
+    imshow(frame);
     dif = dif + 15;
 
-    [x, y] = square_detect(frame, 0.70, 0.79);
+    [x, y] = square_detect(frame, 0.69, 0.79);
     [x1, y1, boundingBox] = detect_from_frame(frame);
  
     % 링 너머 보라색 색상 마크가 인식이 되지 않은 경우 드론 카메라 중심과 링의 중심 일치하도록 조정
@@ -277,6 +282,7 @@ pause(1);
 turn_cnt = 0;
 while true
     frame = snapshot(cameraObj);
+    imshow(frame);
     [x, y] = square_detect(frame, 0, 0.06);
     if isnan(x) || isnan(y)
         [x, y] = square_detect(frame, 0.94, 1);
@@ -317,9 +323,13 @@ while true
     end
 end
 
-dif = 40;
+moveforward(drone, 'Distance', 2, 'Speed', 0.9);
+pause(1);
+
+dif = 20;
 while true
     frame = snapshot(cameraObj);
+    imshow(frame);
     dif = dif + 15;
 
     [x, y] = square_detect(frame, 0, 0.06);
@@ -370,38 +380,7 @@ while true
     end
 end
 
-moveforward(drone, 'Distance', 2.3, 'Speed', 0.9);
-pause(1);
-
-% 드론 카메라 중심이 링 너머 빨간색 색상 마크의 중심과 일치하도록 조정
-dif = 30;
-while true
-    frame = snapshot(cameraObj);
-    dif = dif + 20;
-
-    [x, y] = square_detect(frame, 0, 0.06);
-
-    if isnan(x) || isnan(y)
-        [x, y] = square_detect(frame, 0.94, 1);
-    end
-
-    move_to_center(drone, x, 200, dif);
-
-    if isnan(x) || isnan(y)
-        disp('No red square detected.');
-        break;
-    end
-
-    centroid = [x, 200];
-    dis = centroid - center_point;
-
-    if abs(dis(1)) <= dif
-        disp('Centered successfully!');
-        break;
-    end
-end
-
-moveforward(drone, 'Distance', 1.55, 'Speed', 0.85);
+moveforward(drone, 'Distance', 1.85, 'Speed', 0.9);
 pause(1);
 
 land(drone);
@@ -455,6 +434,12 @@ function [center_x, center_y, boundingBox] = detect_from_frame(frame)
             center_x = boundingBox(1) + circle_center(1);
             center_y = boundingBox(2) + circle_center(2);
         end
+        hold on
+        rectangle('Position', boundingBox, 'EdgeColor', '#F59F00', 'LineWidth', 2);
+        plot(center_x, center_y, 'o')
+        title(['Center X: ', num2str(center_x), ', Center Y: ', num2str(center_y)])
+        axis on
+        grid on
     else
         center_x = NaN;
         center_y = NaN;
@@ -522,4 +507,10 @@ function [center_x, center_y] = square_detect(frame, th_down, th_up)
     
     center_x = boundingBox(1) + (0.5 * boundingBox(3));
     center_y = boundingBox(2) + (0.5 * boundingBox(4));
+    hold on
+    rectangle('Position', boundingBox, 'EdgeColor', '#F59F00', 'LineWidth', 2);
+    plot(center_x, center_y, 'o')
+    title(['Center X: ', num2str(center_x), ', Center Y: ', num2str(center_y)])
+    axis on
+    grid on
 end
