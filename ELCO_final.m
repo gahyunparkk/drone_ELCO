@@ -270,7 +270,7 @@ while true
     end
 end
 
-moveforward(drone, 'Distance', 2.6, 'Speed', 1);
+moveforward(drone, 'Distance', 2.7, 'Speed', 1);
 pause(1);
 
 % 4 th stage
