@@ -79,6 +79,7 @@ while true
     centroid = [x, y];
     if isnan(x)
         [x1, y1, boundingBox] = detect_from_frame(frame);
+        centroid = [x1, y1];
         dis = centroid - center_point;
         if dis(1)>20
             turn(drone, deg2rad(6));
@@ -183,6 +184,7 @@ while true
     dis = centroid - center_point;
     if isnan(x)
         [x1, y1, boundingBox] = detect_from_frame(frame);
+        centroid = [x1, y1];
         dis = centroid - center_point;
         if dis(1)>20
             turn(drone, deg2rad(6));
@@ -285,6 +287,7 @@ while true
     centroid = [x, y];
     if isnan(x)
         [x1, y1, boundingBox] = detect_from_frame(frame);
+        centroid = [x1, y1];
         dis = centroid - center_point;
         if dis(1)>20
             turn(drone, deg2rad(6));
