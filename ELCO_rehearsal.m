@@ -455,12 +455,6 @@ function [center_x, center_y, boundingBox] = detect_from_frame(frame)
             center_x = boundingBox(1) + circle_center(1);
             center_y = boundingBox(2) + circle_center(2);
         end
-        hold on
-        rectangle('Position', boundingBox, 'EdgeColor', '#F59F00', 'LineWidth', 2);
-        plot(center_x, center_y, 'o')
-        title(['Center X: ', num2str(center_x), ', Center Y: ', num2str(center_y)])
-        axis on
-        grid on
     else
         center_x = NaN;
         center_y = NaN;
@@ -528,10 +522,4 @@ function [center_x, center_y] = square_detect(frame, th_down, th_up)
     
     center_x = boundingBox(1) + (0.5 * boundingBox(3));
     center_y = boundingBox(2) + (0.5 * boundingBox(4));
-    hold on
-    rectangle('Position', boundingBox, 'EdgeColor', '#F59F00', 'LineWidth', 2);
-    plot(center_x, center_y, 'o')
-    title(['Center X: ', num2str(center_x), ', Center Y: ', num2str(center_y)])
-    axis on
-    grid on
 end
