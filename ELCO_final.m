@@ -66,7 +66,7 @@ while true
     end
 end
 
-moveforward(drone, 'Distance', 3, 'Speed', 0.85);
+moveforward(drone, 'Distance', 3, 'Speed', 0.8);
 pause(1.5);
 
 % 2 nd stage
@@ -80,6 +80,7 @@ while true
     centroid = [x, y];
     if isnan(x)
         [x1, y1, boundingBox] = detect_from_frame(frame);
+        centroid = [x1, y1];
         dis = centroid - center_point;
         if dis(1)>20
             turn(drone, deg2rad(6));
@@ -186,6 +187,7 @@ while true
     dis = centroid - center_point;
     if isnan(x)
         [x1, y1, boundingBox] = detect_from_frame(frame);
+        centroid = [x1, y1];
         dis = centroid - center_point;
         if dis(1)>20
             turn(drone, deg2rad(6));
@@ -290,6 +292,7 @@ while true
     centroid = [x, y];
     if isnan(x)
         [x1, y1, boundingBox] = detect_from_frame(frame);
+        centroid = [x1, y1];
         dis = centroid - center_point;
         if dis(1)>20
             turn(drone, deg2rad(5));
