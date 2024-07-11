@@ -12,73 +12,84 @@ cameraObj = camera(drone);
 dif = 20;
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
-    dif = dif + 15;
-
-    [x1, y1, boundingBox] = detect_from_frame(frame);
-    if isnan(boundingBox)
-        disp('No bounding box detected.');
-        moveback(drone, 'Distance', 0.2, 'Speed', 1);
-        pause(0.5);
-        [x1, y1, boundingBox] = detect_from_frame(frame);
-    end
-    move_to_center(drone, x1, y1, dif);
-    centroid = [x1, y1];
-    dis = centroid - center_point;
-
-    if abs(dis(1)) <= dif && abs(dis(2)) <= dif
-        disp('Centered successfully!');
-        break;
-    end
-end
-moveforward(drone, 'Distance', 1.5, 'Speed', 1);
-pause(1);
-dif = 20;
-while true
-    frame = snapshot(cameraObj);
-    imshow(frame);
     dif = dif + 15;
 
     [x, y] = square_detect(frame, 0, 0.06);
     if isnan(x) || isnan(y)
-        disp('No red square detected.');
-        moveback(drone, 'Distance', 0.2, 'Speed', 1);
-        pause(0.5);
-        [x1, y1, boundingBox] = detect_from_frame(frame);
+        [x, y] = square_detect(frame, 0.94, 1);
     end
+    [x1, y1, boundingBox] = detect_from_frame(frame);
+
+    % 링 너머 빨간색 색상 마크가 인식되지 않은 경우 드론 카메라 중심과 링의 중심이 일치하도록 조정
+    if isnan(x) || isnan(y)
+        disp('No red square detected.');
+
+        % 링이 인식되지 않은 경우 드론이 뒤로 이동한 후 다시 링을 인식
+        while isnan(boundingBox)
+            disp('No bounding box detected.');
+            moveback(drone, 'Distance', 0.2, 'Speed', 1);
+            pause(0.5);
+            [x1, y1, boundingBox] = detect_from_frame(frame);
+        end
+
+        move_to_center(drone, x1, y1, dif);
+
+        centroid = [x1, y1];
+        dis = centroid - center_point;
+
+        if abs(dis(1)) <= 100 && abs(dis(2)) <= 100
+            disp('Centered successfully!');
+            break;
+        end
+    end
+
+    % 드론 카메라 중심이 링 너머 빨간색 색상 마크의 중심과 일치하도록 조정
     move_to_center(drone, x, y, dif);
+ 
     centroid = [x, y];
     dis = centroid - center_point;
+    centroid1 = [x1, y1];
+    dis1 = centroid1 - center_point;
 
     if abs(dis(1)) <= dif && abs(dis(2)) <= dif
-        disp('Centered successfully!');
-        break;
+        % 빨간색 색상 마크의 중심 (드론의 위치) 와 링의 중심의 차이가 100 보다 작은 경우
+        % 드론이 빨간색 색상 마크와 링의 중심에 위치했다고 판단
+        if abs(dis1(1)) <= 100 && abs(dis1(2)) <= 100
+            disp('Centered successfully!');
+            break;
+        % 빨간색 색상 마크의 중심 (드론의 위치) 와 링의 중심의 차이가 100 보다 큰 경우
+        % 드론 카메라 중심과 링의 중심이 일치하도록 조정
+        else
+            move_to_center(drone, x1, y1, dif);
+        end
     end
 end
 
-moveforward(drone, 'Distance', 2, 'Speed', 1);
-pause(1);
+moveforward(drone, 'Distance', 3.5, 'Speed', 0.8);
+pause(1.5);
 
 % 2 nd stage
 turn(drone, deg2rad(130));
-pause(1);
+pause(1.5);
 turn_cnt = 0;
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     [x, y] = square_detect(frame, 0.30, 0.39);
 
     centroid = [x, y];
     if isnan(x)
         [x1, y1, boundingBox] = detect_from_frame(frame);
-        centroid = [x1, y1];
         dis = centroid - center_point;
         if dis(1)>20
             turn(drone, deg2rad(6));
             disp("turned 5 degree");
+            pause(1);
+            turn_cnt = turn_cnt + 1;
         elseif dis(1)<-20
             turn(drone, deg2rad(-6));
             disp("turned -5 degree");
+            pause(1);
+            turn_cnt = turn_cnt + 1;
         else
             break;
         end
@@ -90,10 +101,12 @@ while true
     if dis(1)>20
         turn(drone, deg2rad(6));
         disp("turned 5 degree");
+        pause(1);
         turn_cnt = turn_cnt + 1;
     elseif dis(1)<-20
         turn(drone, deg2rad(-6));
         disp("turned -5 degree");
+        pause(1);
         turn_cnt = turn_cnt + 1;
     else
         break;
@@ -104,10 +117,9 @@ end
 moveforward(drone, 'Distance', 3.5, 'Speed', 1);
 pause(1);
 
-dif = 30;
+dif = 25;
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     dif = dif + 15;
 
     [x, y] = square_detect(frame, 0.30, 0.39);
@@ -159,7 +171,7 @@ while true
 end
 
 moveforward(drone, 'Distance', 1.6, 'Speed', 1);
-pause(1);
+pause(1.5);
 
 % 3 rd stage
 turn(drone, deg2rad(-130));
@@ -167,23 +179,23 @@ pause(1);
 turn_cnt = 0;
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     [x, y] = square_detect(frame, 0.69, 0.79);
 
     centroid = [x, y];
     dis = centroid - center_point;
     if isnan(x)
         [x1, y1, boundingBox] = detect_from_frame(frame);
-        centroid = [x1, y1];
         dis = centroid - center_point;
         if dis(1)>20
             turn(drone, deg2rad(6));
             disp("turned 5 degree");
             pause(1);
+            turn_cnt = turn_cnt + 1;
         elseif dis(1)<-20
             turn(drone, deg2rad(-6));
             disp("turned -5 degree");
             pause(1);
+            turn_cnt = turn_cnt + 1;
         else
             break;
         end
@@ -207,10 +219,9 @@ while true
 end
 
 
-dif = 30;
+dif = 25;
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     dif = dif + 15;
 
     [x, y] = square_detect(frame, 0.69, 0.79);
@@ -278,16 +289,17 @@ while true
     centroid = [x, y];
     if isnan(x)
         [x1, y1, boundingBox] = detect_from_frame(frame);
-        centroid = [x1, y1];
         dis = centroid - center_point;
         if dis(1)>20
-            turn(drone, deg2rad(6));
+            turn(drone, deg2rad(5));
             disp("turned 5 degree");
             pause(1);
+            turn_cnt = turn_cnt + 1;
         elseif dis(1)<-20
-            turn(drone, deg2rad(-6));
+            turn(drone, deg2rad(-5));
             disp("turned -5 degree");
             pause(1);
+            turn_cnt = turn_cnt + 1;
         else
             break;
         end
@@ -297,12 +309,12 @@ while true
         break;
     end
     if dis(1)>20
-        turn(drone, deg2rad(6));
+        turn(drone, deg2rad(5));
         disp("turned 5 degree");
         pause(1);
         turn_cnt = turn_cnt + 1;
     elseif dis(1)<-20
-        turn(drone, deg2rad(-6));
+        turn(drone, deg2rad(-5));
         disp("turned -5 degree");
         pause(1);
         turn_cnt = turn_cnt + 1;
@@ -311,13 +323,12 @@ while true
     end
 end
 
-moveforward(drone, 'Distance', 2, 'Speed', 1);
+moveforward(drone, 'Distance', 2, 'Speed', 0.9);
 pause(1);
 
 dif = 20;
 while true
     frame = snapshot(cameraObj);
-    imshow(frame);
     dif = dif + 15;
 
     [x, y] = square_detect(frame, 0, 0.06);
@@ -371,7 +382,7 @@ while true
     end
 end
 
-moveforward(drone, 'Distance', 1.85, 'Speed', 0.85);
+moveforward(drone, 'Distance', 1.85, 'Speed', 0.8);
 pause(1);
 
 land(drone);
@@ -379,7 +390,7 @@ land(drone);
 % 파란색 가림막 링의 중심 좌표를 return 하는 함수
 function [center_x, center_y, boundingBox] = detect_from_frame(frame)
     blue_th_down = 0.54;
-    blue_th_up = 0.69;
+    blue_th_up = 0.66;
 
     tohsv = rgb2hsv(frame);
     h = tohsv(:,:,1);
@@ -459,7 +470,7 @@ function move_to_center(drone, target_x, target_y, dif)
         end
     end
     
-    pause(0.7);
+    pause(1);
 end
 
 % 색상 마크의 중심 좌표를 return 하는 함수
