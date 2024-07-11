@@ -8,6 +8,7 @@ pause(1);
 center_point = [480, 200];
 cameraObj = camera(drone);
 
+moveforward(drone, 'Distance', 0.5, 'Speed', 0.9);
 % 1 st stage
 dif = 20;
 while true
@@ -65,7 +66,7 @@ while true
     end
 end
 
-moveforward(drone, 'Distance', 3.5, 'Speed', 0.8);
+moveforward(drone, 'Distance', 3, 'Speed', 0.85);
 pause(1.5);
 
 % 2 nd stage
